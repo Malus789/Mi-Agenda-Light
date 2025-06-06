@@ -9,6 +9,7 @@ using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Mi_Agenda_Light
 {
@@ -23,15 +24,16 @@ namespace Mi_Agenda_Light
 
         private List<string> messagesMotiv = new List<string>
         {
-            "Mensaje 1",
-            "Mensaje 2",
-            "Mensaje 3",
-            "Mensaje 4"
+            "La duda es más honesta que la certeza.",
+            "El pasado nunca muere del todo.",
+            "Somos espejos de lo que miramos.",
+            "Habitar el presente es un arte.",
+            "Nada crece sin paciencia.",
         };
 
         private void SetupTimer()
         {
-            timer.Interval = 60000; // 60 segundos = 1 minuto
+            timer.Interval = 10000; // 60 segundos = 1 minuto
             timer.Tick += Timer_Tick;
             timer.Start();
         }
@@ -39,9 +41,33 @@ namespace Mi_Agenda_Light
         private void Timer_Tick(object sender, EventArgs e)
         {
             Random rnd = new Random();
+
+            Random randomAltMensaje = new Random();
+            int[] opcionesAltMensaje = { 1, 2 };
+            int elegido = opcionesAltMensaje[randomAltMensaje.Next(opcionesAltMensaje.Length)];
+
             int index = rnd.Next(messagesMotiv.Count);
-            toolStripStatusLabelMensajes.Text = messagesMotiv[index]; // Asegúrate de que tu label se llame 'label1' o cambia este nombre al que corresponda
-            timer.Interval = rnd.Next(60000, 600000); // Cambia el intervalo aleatoriamente entre 1 y 10 minutos (60000, 600000)
+            toolStripStatusLabelMensajes.Text = messagesMotiv[index]; // 
+
+            if (listaTareasUrgentes.Count >= 1)
+            {
+                if (elegido == 1)
+                {
+
+                    Random rndRecuerda = new Random();
+                    int indexRecuerda = rndRecuerda.Next(listaTareasUrgentes.Count);
+
+                    toolStripStatusLabelMensajes.Text = "Recuerda: " + listaTareasUrgentes[indexRecuerda];
+                }
+            }
+            else
+            {
+                //toolStripStatusLabelRecuerda.Text = "No hay tareas urgentes.";
+
+            }
+
+            //timer.Interval = rnd.Next(30000, 600000); // Cambia el intervalo aleatoriamente entre 30 segundos y 10 minutos (60000, 600000)
+            timer.Interval = rnd.Next(10000, 30000);
         }
 
         private string horaOfechaActual(string datoPedir)
@@ -98,11 +124,22 @@ namespace Mi_Agenda_Light
         }
 
         private List<string> listaCompletaDatos = new List<string>();
+        private List<string> listaTareasUrgentes = new List<string>();
         private void CargarTitulosEnCheckedListBox()
         {
             List<string> datosGuardados = CargarDatos();
             checkedListBoxEventos.Items.Clear();
             listaCompletaDatos.Clear();
+
+            foreach (string linea in datosGuardados)
+            {
+                var partes = linea.Split('|');
+                if (partes.Length > 3)
+                {
+                    if (partes[3].Trim().Equals("Alta", StringComparison.OrdinalIgnoreCase))
+                        listaTareasUrgentes.Add(partes[0]);
+                }
+            }
 
             foreach (string dato in datosGuardados)
             {
@@ -112,6 +149,27 @@ namespace Mi_Agenda_Light
                     checkedListBoxEventos.Items.Add(partes[0]); // Añade solo el título
                     listaCompletaDatos.Add(dato); // Almacena la línea completa
                 }
+            }
+        }
+
+        private void CargarDesdeArchivoaLista(List<string> listaDestino)
+        {
+            string rutaArchivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "frases.txt");
+
+            if (!File.Exists(rutaArchivo))
+            {
+                // Crear archivo vacío si no existe
+                File.WriteAllText(rutaArchivo, "");
+                return; // No hace nada más
+            }
+
+            // Limpiar la lista antes de llenar
+            listaDestino.Clear();
+
+            // Leer línea por línea y agregar a la lista
+            foreach (string linea in File.ReadLines(rutaArchivo))
+            {
+                listaDestino.Add(linea);
             }
         }
 
@@ -163,7 +221,7 @@ namespace Mi_Agenda_Light
 
         private string DeSegundosARelog(int segundosTotal)
         {
-            
+
             int horas = segundosTotal / 3600;
             int minutos = (segundosTotal / 60) % 60;
             int segundos = segundosTotal % 60;
@@ -282,19 +340,46 @@ namespace Mi_Agenda_Light
                 string ultimoComentario = "";
                 GuardarDatos(titulo, descripcion, prioridad, hora, fechaCreacion, minutosTrabajados, ciclostrabajados, ultimoComentario);
                 toolStripStatusLabelMensajes.Text = "Tarea agregada satisfactoriamente.";
+                timer.Interval = 3000;
             }
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
+            //Configurar Progress Bar Dia
+            progressBarDia.Minimum = 0;
+            progressBarDia.Maximum = 1440; // Total de minutos del día
+            timerDia.Start();
+            ActualizarBarraDelDia();
+
+            //
+            comboBoxAgregarTareaPrioridad.SelectedIndex = 0;
+            checkedListBoxEventos.DrawMode = DrawMode.OwnerDrawFixed;
             CargarTitulosEnCheckedListBox();
+            CargarDesdeArchivoaLista(messagesMotiv);
+
             buttonIniciarCronómetro.Enabled = false;
             buttonFinalizarTarea.Enabled = false;
-            richTextBox1.LoadFile("richtext.rft");
+
+            string rutaArchivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "richtext.rft");
+
+            if (!File.Exists(rutaArchivo))
+            {
+                // Crear archivo vacío si no existe
+                File.WriteAllText(rutaArchivo, "");
+                return; // No hace nada más
+            }
+            else
+            {
+                richTextBox1.LoadFile("richtext.rft");
+            }
+
         }
+
+        bool PrimeraFecha = false;
         private void AddTableToRichTextBox(bool addNewLine)
         {
-           
             int columnWidth1 = 4000;  // Ancho de la primera columna en twips
             int columnWidth2 = 4000; // Ancho de la segunda columna en twips
 
@@ -302,15 +387,16 @@ namespace Mi_Agenda_Light
             string cell1Data = textBoxShowDescripcionItemSelec.Text = MostrarDetallesDelItem(0);
             string cell2Data = "Observacion";
             string cell3Data = @"Inicio: " + horaDeInicioDeTarea + @"\line Final: " + horaDeFinalDeTarea + @"\line Tiempo: " + labelShowUltimoConteo.Text;
-            string cell4Data; 
+            string cell4Data;
             if (TextBoxcomentarioSesion.Text != "")
             {
                 cell4Data = TextBoxcomentarioSesion.Text;
-            } else
+            }
+            else
             {
                 cell4Data = textBoxShowDescripcionItemSelec.Text = MostrarDetallesDelItem(1);
             }
-            
+
 
             // Preparar la inserción de la tabla
             string rtfTable = @"\trowd\trgaph108"; // Iniciar la definición de fila
@@ -331,18 +417,38 @@ namespace Mi_Agenda_Light
             rtfTable += @"\intbl \f0\fs24 " + cell4Data + @"\cell";  // Datos de la segunda celda en la segunda fila
             rtfTable += @"\row";  // Finalizar la fila
 
-            if (addNewLine == false) { 
-                string currentRtf = richTextBox1.Rtf;
-                int lastIndex = currentRtf.LastIndexOf(@"\pard");
-                if (lastIndex != -1)
+            if (addNewLine == false)
+            {
+                if (PrimeraFecha == false)
                 {
-                    currentRtf = currentRtf.Substring(0, lastIndex); // Eliminar el "\pard" al final
-                }
+                    string currentRtf = richTextBox1.Rtf;
+                    int lastIndex = currentRtf.LastIndexOf('}');
+                    if (lastIndex != -1)
+                    {
+                        currentRtf = currentRtf.Substring(0, lastIndex);
+                    }
 
-                // Añadir la nueva tabla y cerrar con "\pard" solo al final
-                currentRtf += rtfTable + @"\pard";
-                richTextBox1.Rtf = currentRtf;
-            } else
+                    currentRtf += rtfTable + @"\pard}";
+                    richTextBox1.Rtf = currentRtf;
+
+                    PrimeraFecha = true;
+
+                }
+                else
+                {
+                    string currentRtf = richTextBox1.Rtf;
+                    int lastIndex = currentRtf.LastIndexOf(@"\pard");
+                    if (lastIndex != -1)
+                    {
+                        currentRtf = currentRtf.Substring(0, lastIndex); // Eliminar el "\pard" al final
+                    }
+
+                    // Añadir la nueva tabla y cerrar con "\pard" solo al final
+                    currentRtf += rtfTable + @"\pard";
+                    richTextBox1.Rtf = currentRtf;
+                }
+            }
+            else
             {
                 string currentRtf = richTextBox1.Rtf;
                 int lastIndex = currentRtf.LastIndexOf('}');
@@ -354,32 +460,72 @@ namespace Mi_Agenda_Light
                 currentRtf += rtfTable + @"\pard}";
                 richTextBox1.Rtf = currentRtf;
             }
+
         }
 
+
+
+        private void VerificarFechaEnRichText(RichTextBox richTextBox)
+        {
+            // Obtener la fecha actual con formato personalizado
+            string fechaHoy = DateTime.Now.ToString("dddd d 'de' MMMM 'del' yyyy",
+                new System.Globalization.CultureInfo("es-ES"));
+
+            // Capitalizar primera letra
+            fechaHoy = char.ToUpper(fechaHoy[0]) + fechaHoy.Substring(1);
+
+            // Verificar si ya está en el texto
+            if (!richTextBox.Text.Contains(fechaHoy))
+            {
+                // Mover el cursor al final
+                richTextBox.SelectionStart = richTextBox.TextLength;
+                richTextBox.SelectionLength = 0;
+
+                // Aplicar estilos
+                richTextBox.SelectionFont = new Font("Segoe UI", 12, FontStyle.Bold);
+                richTextBox.SelectionColor = Color.DarkSlateBlue;
+
+                // Insertar la fecha con estilo
+                richTextBox.AppendText(Environment.NewLine + fechaHoy + Environment.NewLine);
+                
+
+                // Opcional: resetear estilo a negro y normal
+                richTextBox.SelectionFont = richTextBox.Font;
+                richTextBox.SelectionColor = richTextBox.ForeColor;
+            }
+
+        }
 
         private void checkedListBoxEventos_SelectedIndexChanged(object sender, EventArgs e)
         {
             textBoxShowDescripcionItemSelec.Text = MostrarDetallesDelItem(1) + "\r\n" +"\r\nÚltimo reporte: " + "\r\n" + MostrarDetallesDelItem(7) ;
 
             //solucionar error de DeSegundosAReloj lo que pasa despues de que se eliminar una tarea
-            labelShowTiempoTotalIndexSelect.Text = DeSegundosARelog(int.Parse(MostrarDetallesDelItem(5)));
 
-            labelShowTiempoCiclos.Text = MostrarDetallesDelItem(6);
-
-            //Limitando longitud para mostrar solo una parte en un label
-            string textoCompleto = labelInfoEventoSeleccionado.Text = MostrarDetallesDelItem(0);
-            int longitudMaxima = 40;
-
-            if (textoCompleto == null) { }
-            else
-                if (textoCompleto.Length > longitudMaxima)
+            if (checkedListBoxEventos.SelectedIndex == -1)
             {
-                labelInfoEventoSeleccionado.Text = textoCompleto.Substring(0, longitudMaxima) + "...";
+
+            } else {
+                labelShowTiempoTotalIndexSelect.Text = DeSegundosARelog(int.Parse(MostrarDetallesDelItem(5)));
+
+                labelShowTiempoCiclos.Text = MostrarDetallesDelItem(6);
+
+                //Limitando longitud para mostrar solo una parte en un label
+                string textoCompleto = labelInfoEventoSeleccionado.Text = MostrarDetallesDelItem(0);
+                int longitudMaxima = 80;
+
+                if (textoCompleto == null) { }
+                else
+                    if (textoCompleto.Length > longitudMaxima)
+                {
+                    labelInfoEventoSeleccionado.Text = textoCompleto.Substring(0, longitudMaxima) + "...";
+                }
+                else
+                {
+                    labelInfoEventoSeleccionado.Text = textoCompleto;
+                }
             }
-            else
-            {
-                labelInfoEventoSeleccionado.Text = textoCompleto;
-            }
+            
 
             buttonIniciarCronómetro.Enabled = true;
             buttonFinalizarTarea.Enabled = true;
@@ -411,7 +557,10 @@ namespace Mi_Agenda_Light
                 TimerDecimasDeSegundo.Start();
                 buttonIniciarCronómetro.Text = "Pausar";
                 EstadoConteo = "activo";
-                checkedListBoxEventos.Enabled = false;
+                checkedListBoxEventos.Enabled = false;                
+                tabControl1.TabPages[1].Enabled = false;
+                tabControl1.TabPages[2].Enabled = false;
+
                 horaDeInicioDeTarea = horaOfechaActual("time");
             }
             else
@@ -442,6 +591,12 @@ namespace Mi_Agenda_Light
 
         int ShowTiempoConteo = 0;
         int ShowCiclosTotales = 0;
+        string NombreTareaMasDuracion = "";
+        int TareaMayorDuracionSegundos = 0;
+
+        string NombreTareaMenosDuracion = "";
+        int TareaMenosDuracionSegundos = 0;
+
         private void button2_Click(object sender, EventArgs e)
         {
             
@@ -467,6 +622,33 @@ namespace Mi_Agenda_Light
                 ShowCiclosTotales = ShowCiclosTotales + 1;
                 labelShowCiclosTotales.Text = (ShowCiclosTotales).ToString();
 
+                //Actualizando reportes de Tareas Ranking 1
+
+                if (labelTareamasduracion.Text == "Sin sesiones" && labelTareaMenosduracion.Text == "Sin sesiones")
+                {
+                    labelTareamasduracion.Text = labelInfoEventoSeleccionado.Text;
+                    labelTareaMenosduracion.Text = labelInfoEventoSeleccionado.Text;
+
+                    labelTiempoTareaMasDuracion.Text = labelShowCronometro.Text;
+                    labelTiempoTareaMenosDuracion.Text = labelShowCronometro.Text;
+
+
+                } else
+                    { 
+                    
+                    if (FormatoDeTextoASegundos(labelShowCronometro.Text) > FormatoDeTextoASegundos(labelTiempoTareaMasDuracion.Text))
+                    {
+                        labelTareamasduracion.Text = labelInfoEventoSeleccionado.Text;
+                        labelTiempoTareaMasDuracion.Text = labelShowCronometro.Text;
+                    }
+
+                    if (FormatoDeTextoASegundos(labelShowCronometro.Text) < FormatoDeTextoASegundos(labelTiempoTareaMenosDuracion.Text))
+                    {
+                        labelTareaMenosduracion.Text = labelInfoEventoSeleccionado.Text;
+                        labelTiempoTareaMenosDuracion.Text = labelShowCronometro.Text;
+                    }
+
+                }
 
 
                 totalSegundos = 0;
@@ -478,10 +660,27 @@ namespace Mi_Agenda_Light
                 TimerDecimasDeSegundo.Stop();
                 buttonIniciarCronómetro.Text = "Iniciar";
                 checkedListBoxEventos.Enabled = true;
+                tabControl1.TabPages[1].Enabled = true;
+                tabControl1.TabPages[2].Enabled = true;
 
                 EstadoConteo = "Inactivo";
+
+                if (checkBoxLogAutomatico.Checked == true)
+                {
+                    button1_Click_2(null, EventArgs.Empty);
+                }
+
+                cargarTareasToolStripMenuItem_Click(null, EventArgs.Empty);
+
+                checkedListBoxEventos.SelectedIndex = indiceSeleccionado;
             }
             
+        }
+
+        private void ActualizarBarraDelDia()
+        {
+            int minutosActuales = DateTime.Now.Hour * 60 + DateTime.Now.Minute;
+            progressBarDia.Value = Math.Min(minutosActuales, progressBarDia.Maximum); // Seguridad por si algo falla
         }
 
         private void cargarTareasToolStripMenuItem_Click(object sender, EventArgs e)
@@ -494,10 +693,13 @@ namespace Mi_Agenda_Light
         private void button1_Click_2(object sender, EventArgs e)
         {
 
+            VerificarFechaEnRichText(richTextBox1);
+
             if (checkBoxSaltoLinea.Checked == false)
-            {
+            {              
                 AddTableToRichTextBox(false);
                 richTextBox1.SaveFile("richtext.rft");
+
             } else
             {
                 AddTableToRichTextBox(true);
@@ -515,11 +717,25 @@ namespace Mi_Agenda_Light
                 DialogResult dialogResult = MessageBox.Show("¿Estás seguro de que deseas eliminar este evento de la lista permanentemente?", "Confirmar eliminación", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
+                    checkedListBoxEventos.SelectedIndex = 0;
                     EliminarItemCheckedListBox(indiceSeleccionado);
                 }
             }
         }
+
+        private void buttonInsertarATexto_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void timerDia_Tick(object sender, EventArgs e)
+        {
+            ActualizarBarraDelDia();
+        }
     }
+
+    
+
 }
 
 

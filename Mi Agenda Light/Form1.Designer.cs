@@ -52,6 +52,12 @@
             this.eliminarTareaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.labelTareaMenosduracion = new System.Windows.Forms.Label();
+            this.labelTiempoTareaMenosDuracion = new System.Windows.Forms.Label();
+            this.labeltareaMenosduracionLabel = new System.Windows.Forms.Label();
+            this.labelTareamasduracion = new System.Windows.Forms.Label();
+            this.labelTiempoTareaMasDuracion = new System.Windows.Forms.Label();
+            this.labelTareamasduracionLabel = new System.Windows.Forms.Label();
             this.labelShowCiclosTotales = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.labelShowTiempoTotal = new System.Windows.Forms.Label();
@@ -68,8 +74,9 @@
             this.label7 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.checkBoxLogAutomatico = new System.Windows.Forms.CheckBox();
             this.checkBoxSaltoLinea = new System.Windows.Forms.CheckBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.buttonAgregarLog = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelMensajes = new System.Windows.Forms.ToolStripStatusLabel();
@@ -78,12 +85,9 @@
             this.abrirAplicaciónToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerCronometro = new System.Windows.Forms.Timer(this.components);
             this.TimerDecimasDeSegundo = new System.Windows.Forms.Timer(this.components);
-            this.label1 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.progressBarDia = new System.Windows.Forms.ProgressBar();
+            this.timerDia = new System.Windows.Forms.Timer(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -96,6 +100,7 @@
             this.groupBox5.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -108,7 +113,7 @@
             this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(649, 395);
+            this.tabControl1.Size = new System.Drawing.Size(649, 390);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
@@ -119,7 +124,7 @@
             this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage1.Size = new System.Drawing.Size(641, 369);
+            this.tabPage1.Size = new System.Drawing.Size(641, 364);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Tareas";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -134,7 +139,7 @@
             this.groupBox2.Controls.Add(this.buttonIniciarCronómetro);
             this.groupBox2.Location = new System.Drawing.Point(484, 4);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(150, 336);
+            this.groupBox2.Size = new System.Drawing.Size(150, 337);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "A Trabajar";
@@ -206,7 +211,7 @@
             this.groupBox1.Controls.Add(this.checkedListBoxEventos);
             this.groupBox1.Location = new System.Drawing.Point(5, 4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(477, 336);
+            this.groupBox1.Size = new System.Drawing.Size(477, 337);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Tareas";
@@ -303,25 +308,27 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.progressBarDia);
+            this.tabPage2.Controls.Add(this.pictureBox1);
             this.tabPage2.Controls.Add(this.groupBox3);
             this.tabPage2.Controls.Add(this.groupBox4);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage2.Size = new System.Drawing.Size(641, 369);
+            this.tabPage2.Size = new System.Drawing.Size(641, 364);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Configuración";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.label13);
-            this.groupBox3.Controls.Add(this.label14);
-            this.groupBox3.Controls.Add(this.label15);
-            this.groupBox3.Controls.Add(this.label12);
-            this.groupBox3.Controls.Add(this.label5);
-            this.groupBox3.Controls.Add(this.label1);
+            this.groupBox3.Controls.Add(this.labelTareaMenosduracion);
+            this.groupBox3.Controls.Add(this.labelTiempoTareaMenosDuracion);
+            this.groupBox3.Controls.Add(this.labeltareaMenosduracionLabel);
+            this.groupBox3.Controls.Add(this.labelTareamasduracion);
+            this.groupBox3.Controls.Add(this.labelTiempoTareaMasDuracion);
+            this.groupBox3.Controls.Add(this.labelTareamasduracionLabel);
             this.groupBox3.Controls.Add(this.labelShowCiclosTotales);
             this.groupBox3.Controls.Add(this.label10);
             this.groupBox3.Controls.Add(this.labelShowTiempoTotal);
@@ -334,6 +341,60 @@
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Reportes de la Sesión";
+            // 
+            // labelTareaMenosduracion
+            // 
+            this.labelTareaMenosduracion.AutoSize = true;
+            this.labelTareaMenosduracion.Location = new System.Drawing.Point(145, 95);
+            this.labelTareaMenosduracion.Name = "labelTareaMenosduracion";
+            this.labelTareaMenosduracion.Size = new System.Drawing.Size(66, 13);
+            this.labelTareaMenosduracion.TabIndex = 17;
+            this.labelTareaMenosduracion.Text = "Sin sesiones";
+            // 
+            // labelTiempoTareaMenosDuracion
+            // 
+            this.labelTiempoTareaMenosDuracion.AutoSize = true;
+            this.labelTiempoTareaMenosDuracion.Location = new System.Drawing.Point(145, 113);
+            this.labelTiempoTareaMenosDuracion.Name = "labelTiempoTareaMenosDuracion";
+            this.labelTiempoTareaMenosDuracion.Size = new System.Drawing.Size(49, 13);
+            this.labelTiempoTareaMenosDuracion.TabIndex = 16;
+            this.labelTiempoTareaMenosDuracion.Text = "00:00:00";
+            // 
+            // labeltareaMenosduracionLabel
+            // 
+            this.labeltareaMenosduracionLabel.AutoSize = true;
+            this.labeltareaMenosduracionLabel.Location = new System.Drawing.Point(145, 79);
+            this.labeltareaMenosduracionLabel.Name = "labeltareaMenosduracionLabel";
+            this.labeltareaMenosduracionLabel.Size = new System.Drawing.Size(135, 13);
+            this.labeltareaMenosduracionLabel.TabIndex = 15;
+            this.labeltareaMenosduracionLabel.Text = "Sesión de menos duración:";
+            // 
+            // labelTareamasduracion
+            // 
+            this.labelTareamasduracion.AutoSize = true;
+            this.labelTareamasduracion.Location = new System.Drawing.Point(145, 36);
+            this.labelTareamasduracion.Name = "labelTareamasduracion";
+            this.labelTareamasduracion.Size = new System.Drawing.Size(66, 13);
+            this.labelTareamasduracion.TabIndex = 14;
+            this.labelTareamasduracion.Text = "Sin sesiones";
+            // 
+            // labelTiempoTareaMasDuracion
+            // 
+            this.labelTiempoTareaMasDuracion.AutoSize = true;
+            this.labelTiempoTareaMasDuracion.Location = new System.Drawing.Point(145, 53);
+            this.labelTiempoTareaMasDuracion.Name = "labelTiempoTareaMasDuracion";
+            this.labelTiempoTareaMasDuracion.Size = new System.Drawing.Size(49, 13);
+            this.labelTiempoTareaMasDuracion.TabIndex = 13;
+            this.labelTiempoTareaMasDuracion.Text = "00:00:00";
+            // 
+            // labelTareamasduracionLabel
+            // 
+            this.labelTareamasduracionLabel.AutoSize = true;
+            this.labelTareamasduracionLabel.Location = new System.Drawing.Point(145, 20);
+            this.labelTareamasduracionLabel.Name = "labelTareamasduracionLabel";
+            this.labelTareamasduracionLabel.Size = new System.Drawing.Size(123, 13);
+            this.labelTareamasduracionLabel.TabIndex = 12;
+            this.labelTareamasduracionLabel.Text = "Sesión de mas duración:";
             // 
             // labelShowCiclosTotales
             // 
@@ -409,6 +470,7 @@
             // 
             // comboBoxAgregarTareaPrioridad
             // 
+            this.comboBoxAgregarTareaPrioridad.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAgregarTareaPrioridad.FormattingEnabled = true;
             this.comboBoxAgregarTareaPrioridad.Items.AddRange(new object[] {
             "Normal",
@@ -417,14 +479,13 @@
             this.comboBoxAgregarTareaPrioridad.Name = "comboBoxAgregarTareaPrioridad";
             this.comboBoxAgregarTareaPrioridad.Size = new System.Drawing.Size(121, 21);
             this.comboBoxAgregarTareaPrioridad.TabIndex = 3;
-            this.comboBoxAgregarTareaPrioridad.Text = "Normal";
             // 
             // buttonAgregarTareaNueva
             // 
             this.buttonAgregarTareaNueva.Location = new System.Drawing.Point(213, 146);
             this.buttonAgregarTareaNueva.Name = "buttonAgregarTareaNueva";
             this.buttonAgregarTareaNueva.Size = new System.Drawing.Size(92, 30);
-            this.buttonAgregarTareaNueva.TabIndex = 6;
+            this.buttonAgregarTareaNueva.TabIndex = 4;
             this.buttonAgregarTareaNueva.Text = "Agregar";
             this.buttonAgregarTareaNueva.UseVisualStyleBackColor = true;
             this.buttonAgregarTareaNueva.Click += new System.EventHandler(this.buttonAgregarTareaNueva_Click);
@@ -444,7 +505,7 @@
             this.textBoxAgregarTareaDescrip.Multiline = true;
             this.textBoxAgregarTareaDescrip.Name = "textBoxAgregarTareaDescrip";
             this.textBoxAgregarTareaDescrip.Size = new System.Drawing.Size(297, 60);
-            this.textBoxAgregarTareaDescrip.TabIndex = 5;
+            this.textBoxAgregarTareaDescrip.TabIndex = 2;
             // 
             // label9
             // 
@@ -476,15 +537,16 @@
             this.tabPage3.Controls.Add(this.groupBox5);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(641, 369);
+            this.tabPage3.Size = new System.Drawing.Size(641, 364);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Reporte";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.checkBoxLogAutomatico);
             this.groupBox5.Controls.Add(this.checkBoxSaltoLinea);
-            this.groupBox5.Controls.Add(this.button1);
+            this.groupBox5.Controls.Add(this.buttonAgregarLog);
             this.groupBox5.Controls.Add(this.richTextBox1);
             this.groupBox5.Location = new System.Drawing.Point(5, 4);
             this.groupBox5.Name = "groupBox5";
@@ -493,25 +555,37 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Impresión:";
             // 
+            // checkBoxLogAutomatico
+            // 
+            this.checkBoxLogAutomatico.AutoSize = true;
+            this.checkBoxLogAutomatico.Checked = true;
+            this.checkBoxLogAutomatico.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxLogAutomatico.Location = new System.Drawing.Point(6, 314);
+            this.checkBoxLogAutomatico.Name = "checkBoxLogAutomatico";
+            this.checkBoxLogAutomatico.Size = new System.Drawing.Size(79, 17);
+            this.checkBoxLogAutomatico.TabIndex = 3;
+            this.checkBoxLogAutomatico.Text = "Automático";
+            this.checkBoxLogAutomatico.UseVisualStyleBackColor = true;
+            // 
             // checkBoxSaltoLinea
             // 
             this.checkBoxSaltoLinea.AutoSize = true;
-            this.checkBoxSaltoLinea.Location = new System.Drawing.Point(326, 312);
+            this.checkBoxSaltoLinea.Location = new System.Drawing.Point(364, 314);
             this.checkBoxSaltoLinea.Name = "checkBoxSaltoLinea";
-            this.checkBoxSaltoLinea.Size = new System.Drawing.Size(153, 17);
+            this.checkBoxSaltoLinea.Size = new System.Drawing.Size(115, 17);
             this.checkBoxSaltoLinea.TabIndex = 2;
-            this.checkBoxSaltoLinea.Text = "Reporte con salto de linea.";
+            this.checkBoxSaltoLinea.Text = "Usar salto de línea";
             this.checkBoxSaltoLinea.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // buttonAgregarLog
             // 
-            this.button1.Location = new System.Drawing.Point(485, 308);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(137, 23);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_2);
+            this.buttonAgregarLog.Location = new System.Drawing.Point(485, 308);
+            this.buttonAgregarLog.Name = "buttonAgregarLog";
+            this.buttonAgregarLog.Size = new System.Drawing.Size(137, 23);
+            this.buttonAgregarLog.TabIndex = 1;
+            this.buttonAgregarLog.Text = "Agregar última sesión";
+            this.buttonAgregarLog.UseVisualStyleBackColor = true;
+            this.buttonAgregarLog.Click += new System.EventHandler(this.button1_Click_2);
             // 
             // richTextBox1
             // 
@@ -526,10 +600,11 @@
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelMensajes});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 365);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 368);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 10, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(649, 30);
+            this.statusStrip1.Size = new System.Drawing.Size(649, 22);
+            this.statusStrip1.SizingGrip = false;
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -537,7 +612,7 @@
             // 
             this.toolStripStatusLabelMensajes.AutoSize = false;
             this.toolStripStatusLabelMensajes.Name = "toolStripStatusLabelMensajes";
-            this.toolStripStatusLabelMensajes.Size = new System.Drawing.Size(380, 25);
+            this.toolStripStatusLabelMensajes.Size = new System.Drawing.Size(380, 17);
             this.toolStripStatusLabelMensajes.Text = "Hoy va a ser un día muy efectivo...";
             this.toolStripStatusLabelMensajes.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -545,7 +620,7 @@
             // 
             this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip1;
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "notifyIcon1";
+            this.notifyIcon1.Text = "My Agenda Light";
             this.notifyIcon1.Visible = true;
             this.notifyIcon1.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
             // 
@@ -573,72 +648,44 @@
             // 
             this.TimerDecimasDeSegundo.Tick += new System.EventHandler(this.TimerDecimasDeSegundo_Tick);
             // 
-            // label1
+            // pictureBox1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(145, 20);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(123, 13);
-            this.label1.TabIndex = 12;
-            this.label1.Text = "Sesión de mas duración:";
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
+            this.pictureBox1.Location = new System.Drawing.Point(491, 195);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(142, 115);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 7;
+            this.pictureBox1.TabStop = false;
             // 
-            // label5
+            // progressBarDia
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(145, 53);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(49, 13);
-            this.label5.TabIndex = 13;
-            this.label5.Text = "00:00:00";
+            this.progressBarDia.Location = new System.Drawing.Point(5, 316);
+            this.progressBarDia.Name = "progressBarDia";
+            this.progressBarDia.Size = new System.Drawing.Size(628, 23);
+            this.progressBarDia.TabIndex = 8;
             // 
-            // label12
+            // timerDia
             // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(145, 36);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(154, 13);
-            this.label12.TabIndex = 14;
-            this.label12.Text = "Ejemplo de un nombre de tarea";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(145, 95);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(154, 13);
-            this.label13.TabIndex = 17;
-            this.label13.Text = "Ejemplo de un nombre de tarea";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(145, 113);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(49, 13);
-            this.label14.TabIndex = 16;
-            this.label14.Text = "00:00:00";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(145, 79);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(135, 13);
-            this.label15.TabIndex = 15;
-            this.label15.Text = "Sesión de menos duración:";
+            this.timerDia.Interval = 60000;
+            this.timerDia.Tick += new System.EventHandler(this.timerDia_Tick);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(649, 395);
+            this.ClientSize = new System.Drawing.Size(649, 390);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tabControl1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.HelpButton = true;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.RightToLeftLayout = true;
+            this.Text = "My Agenda Light";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Resize += new System.EventHandler(this.Form1_Resize);
             this.tabControl1.ResumeLayout(false);
@@ -659,6 +706,7 @@
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.contextMenuStrip1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -708,18 +756,22 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonAgregarLog;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.TextBox TextBoxcomentarioSesion;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.ToolStripMenuItem eliminarTareaToolStripMenuItem;
         private System.Windows.Forms.CheckBox checkBoxSaltoLinea;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelTareaMenosduracion;
+        private System.Windows.Forms.Label labelTiempoTareaMenosDuracion;
+        private System.Windows.Forms.Label labeltareaMenosduracionLabel;
+        private System.Windows.Forms.Label labelTareamasduracion;
+        private System.Windows.Forms.Label labelTiempoTareaMasDuracion;
+        private System.Windows.Forms.Label labelTareamasduracionLabel;
+        private System.Windows.Forms.CheckBox checkBoxLogAutomatico;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.ProgressBar progressBarDia;
+        private System.Windows.Forms.Timer timerDia;
     }
 }
 
