@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+
 
 namespace Mi_Agenda_Light
 {
@@ -341,6 +344,7 @@ namespace Mi_Agenda_Light
                 GuardarDatos(titulo, descripcion, prioridad, hora, fechaCreacion, minutosTrabajados, ciclostrabajados, ultimoComentario);
                 toolStripStatusLabelMensajes.Text = "Tarea agregada satisfactoriamente.";
                 timer.Interval = 3000;
+                cargarTareasToolStripMenuItem_Click(null, null);
             }
         }
 
@@ -732,9 +736,288 @@ namespace Mi_Agenda_Light
         {
             ActualizarBarraDelDia();
         }
+
+        public class Tarea
+        {
+            public DateTime Fecha { get; set; }
+            public string Nombre { get; set; }
+            public string Observacion { get; set; }
+            public TimeSpan Tiempo { get; set; }
+        }
+
+
+
+        public List<Tarea> ExtraerTareas(string texto)
+        {
+            var tareas = new List<Tarea>();
+            var lineas = texto.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+
+            var rxFecha = new Regex(@"^\w+ \d{1,2} de \w+ del \d{4}$", RegexOptions.IgnoreCase);
+            var rxTiempo = new Regex(@"Tiempo:\s*(\d{2}:\d{2}:\d{2})", RegexOptions.IgnoreCase);
+
+            DateTime fechaActual = DateTime.MinValue;
+            string nombrePend = null;   // nombre de la tarea en cabecera
+            string obsPend = "";     // observación de cabecera (si hubiera)
+
+            foreach (var raw in lineas)
+            {
+                string l = raw.Trim();
+
+                //------------------------------------------------------------------
+                // 1)  DETECTAR FECHA (cambia contexto)
+                //------------------------------------------------------------------
+                if (rxFecha.IsMatch(l))
+                {
+                    DateTime.TryParseExact(
+                        l,
+                        "dddd d 'de' MMMM 'del' yyyy",
+                        new CultureInfo("es-ES"),
+                        DateTimeStyles.None,
+                        out fechaActual);
+
+                    // descartar bloque incompleto anterior
+                    nombrePend = null;
+                    obsPend = "";
+                    continue;
+                }
+
+                //------------------------------------------------------------------
+                // 2)  CABECERA DE TAREA  (fila 1 / celda 1)
+                //------------------------------------------------------------------
+                bool esCabecera = (l.Contains('\t') || l.Contains('/')) &&
+                                  !l.StartsWith("Inicio:", StringComparison.OrdinalIgnoreCase) &&
+                                  !l.StartsWith("Tiempo:", StringComparison.OrdinalIgnoreCase);
+
+                if (esCabecera)
+                {
+                    string[] partes = l.Contains('\t')
+                                      ? l.Split('\t')
+                                      : l.Split('/');
+
+                    string candidato = partes[0].Trim();
+
+                    // ignorar si el “nombre” es vacío o literalmente "Observacion"
+                    if (!string.IsNullOrWhiteSpace(candidato) &&
+                        candidato.IndexOf("Observacion", StringComparison.OrdinalIgnoreCase) < 0)
+                    {
+                        nombrePend = candidato;
+                        obsPend = partes.Length > 1 ? partes[1].Trim() : "";
+                    }
+                    continue;
+                }
+
+                //------------------------------------------------------------------
+                // 3)  LÍNEA “Tiempo: hh:mm:ss”  (fila 2 / celda 1)
+                //------------------------------------------------------------------
+                var m = rxTiempo.Match(l);
+                if (m.Success && nombrePend != null)
+                {
+                    if (TimeSpan.TryParse(m.Groups[1].Value, out var ts) &&
+                        ts > TimeSpan.Zero &&
+                        fechaActual != DateTime.MinValue)
+                    {
+                        // ¿observación real a la derecha de la línea Tiempo?  (celda 2)
+                        string obsFinal = obsPend;                // valor por defecto
+
+                        if (raw.Contains('\t'))
+                        {
+                            var partes2 = raw.Split('\t');
+                            if (partes2.Length > 1)
+                                obsFinal = partes2[1].Trim();
+                        }
+                        else
+                        {
+                            var partes2 = Regex.Split(raw, @"\s{2,}");
+                            if (partes2.Length > 1)
+                                obsFinal = partes2[1].Trim();
+                        }
+
+                        tareas.Add(new Tarea
+                        {
+                            Fecha = fechaActual,
+                            Nombre = nombrePend,
+                            Observacion = obsFinal,
+                            Tiempo = ts
+                        });
+                    }
+
+                    // limpiar para la próxima tarea
+                    nombrePend = null;
+                    obsPend = "";
+                }
+            }
+
+            return tareas;
+        }
+
+
+        /// Imprime el resumen dentro del mismo RichTextBox.
+        /// Si “desde” y/o “hasta” son null se toma todo el documento.
+        public void ImprimirResumen(RichTextBox rtb,
+                                    DateTime? desde = null,
+                                    DateTime? hasta = null)
+        {
+            var todas = ExtraerTareas(rtb.Text);
+
+            // ---- Filtrado por rango (inclusive) -----------------
+            var tareas = todas
+                .Where(t =>
+                    (!desde.HasValue || t.Fecha.Date >= desde.Value.Date) &&
+                    (!hasta.HasValue || t.Fecha.Date <= hasta.Value.Date))
+                .ToList();
+
+            if (tareas.Count == 0)
+            {
+                MessageBox.Show("No se encontraron tareas en el rango solicitado.");
+                return;
+            }
+
+            var sb = new StringBuilder();
+            sb.AppendLine("\n=== RESUMEN DE TAREAS ===\n");
+
+            foreach (var g in tareas.GroupBy(t => t.Fecha).OrderBy(g => g.Key))
+            {
+                sb.AppendLine(g.Key.ToString("dddd d 'de' MMMM 'del' yyyy",
+                                             new CultureInfo("es-ES")));
+
+                foreach (var t in g)
+                {
+                    string obsTxt = string.IsNullOrWhiteSpace(t.Observacion)
+                                    ? ""
+                                    : $" ({t.Observacion})";
+                    sb.AppendLine($"· {t.Nombre}: {t.Tiempo}{obsTxt}");
+                }
+
+                var totDia = new TimeSpan(g.Sum(t => t.Tiempo.Ticks));
+                sb.AppendLine($"⌛ Total día: {totDia}\n");
+            }
+
+            var totGen = new TimeSpan(tareas.Sum(t => t.Tiempo.Ticks));
+            sb.AppendLine($"🧮 Total acumulado: {totGen}");
+
+            rtb.AppendText(sb.ToString());
+        }
+
+
+
+        public void ImprimirEstadisticas(RichTextBox rtb,
+                                 DateTime? desde = null,
+                                 DateTime? hasta = null)
+        {
+            // 1) Obtener todas las tareas (usa tu función existente)
+            var todas = ExtraerTareas(rtb.Text);
+
+            // 2) Filtrar por rango, si se especifica
+            var tareas = todas
+                .Where(t =>
+                    (!desde.HasValue || t.Fecha.Date >= desde.Value.Date) &&
+                    (!hasta.HasValue || t.Fecha.Date <= hasta.Value.Date))
+                .ToList();
+
+            if (!tareas.Any())
+            {
+                MessageBox.Show("No hay tareas en el rango indicado.");
+                return;
+            }
+
+            // 3) Acumular tiempo total y conteo por nombre de tarea
+            var porTarea = tareas
+                .GroupBy(t => t.Nombre)
+                .Select(g => new
+                {
+                    Nombre = g.Key,
+                    Total = new TimeSpan(g.Sum(x => x.Tiempo.Ticks)),
+                    Veces = g.Count()
+                })
+                .OrderByDescending(x => x.Total)
+                .ToList();
+
+            // Máximo y mínimo
+            var maxTiempo = porTarea.First().Total;
+            var minTiempo = porTarea.Last().Total;
+
+            var masRealizadas = porTarea.Where(x => x.Total == maxTiempo)
+                                        .Select(x => x.Nombre)
+                                        .ToList();
+
+            var menosRealizadas = porTarea.Where(x => x.Total == minTiempo)
+                                          .Select(x => x.Nombre)
+                                          .ToList();
+
+            // 4) Tiempo total por día
+            var porDia = tareas
+                .GroupBy(t => t.Fecha.Date)
+                .Select(g => new
+                {
+                    Dia = g.Key,
+                    Total = new TimeSpan(g.Sum(x => x.Tiempo.Ticks))
+                })
+                .OrderByDescending(x => x.Total)
+                .ToList();
+
+            string diaMax = string.Empty;
+            string diaMin = string.Empty;
+
+            if (porDia.Count > 1)
+            {
+                var maxDiaTotal = porDia.First().Total;
+                var minDiaTotal = porDia.Last().Total;
+
+                diaMax = porDia.First(x => x.Total == maxDiaTotal)
+                             .Dia.ToString("dddd d 'de' MMMM 'del' yyyy",
+                                           new CultureInfo("es-ES"));
+
+                diaMin = porDia.First(x => x.Total == minDiaTotal)
+                             .Dia.ToString("dddd d 'de' MMMM 'del' yyyy",
+                                           new CultureInfo("es-ES"));
+            }
+
+            // 5) Construir salida
+            var sb = new StringBuilder();
+            sb.AppendLine();
+            sb.AppendLine("=== ESTADÍSTICAS DE TAREAS ===");
+            sb.AppendLine();
+
+            sb.AppendLine($"Tarea(s) con MÁS tiempo : {string.Join("; ", masRealizadas)}  ({maxTiempo})");
+            sb.AppendLine($"Tarea(s) con MENOS tiempo: {string.Join("; ", menosRealizadas)}  ({minTiempo})");
+
+            if (!string.IsNullOrEmpty(diaMax))
+            {
+                sb.AppendLine();
+                sb.AppendLine($"Día con MÁS tiempo total  : {diaMax}  ({porDia.First().Total})");
+                sb.AppendLine($"Día con MENOS tiempo total: {diaMin}  ({porDia.Last().Total})");
+            }
+
+            sb.AppendLine();
+            sb.AppendLine("Tiempo total por tarea:");
+            foreach (var t in porTarea)
+                sb.AppendLine($"· {t.Nombre} ({t.Veces}): {t.Total}");
+
+            // 6) Añadir al RichTextBox
+            rtb.AppendText(sb.ToString());
+
+        }
+
+            private void button1_Click_1(object sender, EventArgs e)
+        {
+
+            ImprimirResumen(richTextBox1);
+
+            ImprimirEstadisticas(richTextBox1);
+
+            /* ImprimirResumen(
+                 richTextBox1,
+                 new DateTime(2025, 6, 5),
+                 new DateTime(2025, 6, 6));*/
+
+            //ImprimirResumen(richTextBox1, desde: new DateTime(2025, 6, 6));
+
+            // ImprimirResumen(richTextBox1, hasta: new DateTime(2025, 6, 6));
+
+        }
     }
 
-    
+
 
 }
 

@@ -51,6 +51,8 @@
             this.cargarTareasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.eliminarTareaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.progressBarDia = new System.Windows.Forms.ProgressBar();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.labelTareaMenosduracion = new System.Windows.Forms.Label();
             this.labelTiempoTareaMenosDuracion = new System.Windows.Forms.Label();
@@ -85,22 +87,21 @@
             this.abrirAplicaciónToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timerCronometro = new System.Windows.Forms.Timer(this.components);
             this.TimerDecimasDeSegundo = new System.Windows.Forms.Timer(this.components);
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.progressBarDia = new System.Windows.Forms.ProgressBar();
             this.timerDia = new System.Windows.Forms.Timer(this.components);
+            this.button1 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripListaTareas.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -275,9 +276,6 @@
             // 
             this.checkedListBoxEventos.ContextMenuStrip = this.contextMenuStripListaTareas;
             this.checkedListBoxEventos.FormattingEnabled = true;
-            this.checkedListBoxEventos.Items.AddRange(new object[] {
-            "Tarea 1",
-            "Tarea 2"});
             this.checkedListBoxEventos.Location = new System.Drawing.Point(6, 19);
             this.checkedListBoxEventos.Name = "checkedListBoxEventos";
             this.checkedListBoxEventos.Size = new System.Drawing.Size(465, 199);
@@ -320,6 +318,24 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Configuración";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // progressBarDia
+            // 
+            this.progressBarDia.Location = new System.Drawing.Point(5, 316);
+            this.progressBarDia.Name = "progressBarDia";
+            this.progressBarDia.Size = new System.Drawing.Size(628, 23);
+            this.progressBarDia.TabIndex = 8;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
+            this.pictureBox1.Location = new System.Drawing.Point(491, 195);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(142, 115);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 7;
+            this.pictureBox1.TabStop = false;
             // 
             // groupBox3
             // 
@@ -544,6 +560,7 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.button1);
             this.groupBox5.Controls.Add(this.checkBoxLogAutomatico);
             this.groupBox5.Controls.Add(this.checkBoxSaltoLinea);
             this.groupBox5.Controls.Add(this.buttonAgregarLog);
@@ -648,28 +665,20 @@
             // 
             this.TimerDecimasDeSegundo.Tick += new System.EventHandler(this.TimerDecimasDeSegundo_Tick);
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
-            this.pictureBox1.Location = new System.Drawing.Point(491, 195);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(142, 115);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 7;
-            this.pictureBox1.TabStop = false;
-            // 
-            // progressBarDia
-            // 
-            this.progressBarDia.Location = new System.Drawing.Point(5, 316);
-            this.progressBarDia.Name = "progressBarDia";
-            this.progressBarDia.Size = new System.Drawing.Size(628, 23);
-            this.progressBarDia.TabIndex = 8;
-            // 
             // timerDia
             // 
             this.timerDia.Interval = 60000;
             this.timerDia.Tick += new System.EventHandler(this.timerDia_Tick);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(241, 308);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // Form1
             // 
@@ -696,6 +705,7 @@
             this.groupBox1.PerformLayout();
             this.contextMenuStripListaTareas.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
@@ -706,7 +716,6 @@
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.contextMenuStrip1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -772,6 +781,7 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ProgressBar progressBarDia;
         private System.Windows.Forms.Timer timerDia;
+        private System.Windows.Forms.Button button1;
     }
 }
 
