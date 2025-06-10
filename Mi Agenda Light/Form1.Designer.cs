@@ -76,10 +76,13 @@
             this.label7 = new System.Windows.Forms.Label();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.checkBoxLogAutomatico = new System.Windows.Forms.CheckBox();
             this.checkBoxSaltoLinea = new System.Windows.Forms.CheckBox();
             this.buttonAgregarLog = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelMensajes = new System.Windows.Forms.ToolStripStatusLabel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
@@ -88,7 +91,23 @@
             this.timerCronometro = new System.Windows.Forms.Timer(this.components);
             this.TimerDecimasDeSegundo = new System.Windows.Forms.Timer(this.components);
             this.timerDia = new System.Windows.Forms.Timer(this.components);
-            this.button1 = new System.Windows.Forms.Button();
+            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.buttonImprimirEstadisticas = new System.Windows.Forms.Button();
+            this.dateTimePickerEstadFechaInicio = new System.Windows.Forms.DateTimePicker();
+            this.label1 = new System.Windows.Forms.Label();
+            this.dateTimePickerEstadFechaFinal = new System.Windows.Forms.DateTimePicker();
+            this.label5 = new System.Windows.Forms.Label();
+            this.checkBoxEstadResumenDia = new System.Windows.Forms.CheckBox();
+            this.checkBoxEstadEstadTareas = new System.Windows.Forms.CheckBox();
+            this.checkBoxEstadTiempoTotalTareas = new System.Windows.Forms.CheckBox();
+            this.radioButtonEstadRangoFechas = new System.Windows.Forms.RadioButton();
+            this.radioButtonEstadDatosDia = new System.Windows.Forms.RadioButton();
+            this.label12 = new System.Windows.Forms.Label();
+            this.radioButtonEstadTodo = new System.Windows.Forms.RadioButton();
+            this.radioButtonEstaEntre = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -100,8 +119,11 @@
             this.groupBox4.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            this.tabPage4.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -109,9 +131,10 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(649, 390);
@@ -122,9 +145,9 @@
             this.tabPage1.Controls.Add(this.groupBox2);
             this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabPage1.Size = new System.Drawing.Size(641, 364);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Tareas";
@@ -284,6 +307,7 @@
             // 
             // contextMenuStripListaTareas
             // 
+            this.contextMenuStripListaTareas.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.contextMenuStripListaTareas.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cargarTareasToolStripMenuItem,
             this.eliminarTareaToolStripMenuItem});
@@ -311,9 +335,9 @@
             this.tabPage2.Controls.Add(this.groupBox3);
             this.tabPage2.Controls.Add(this.groupBox4);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabPage2.Size = new System.Drawing.Size(641, 364);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Configuración";
@@ -572,6 +596,16 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Impresión:";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(241, 308);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            // 
             // checkBoxLogAutomatico
             // 
             this.checkBoxLogAutomatico.AutoSize = true;
@@ -611,6 +645,43 @@
             this.richTextBox1.Size = new System.Drawing.Size(616, 283);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.groupBox6);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(641, 364);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "Estadísticas";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            this.tabPage4.Click += new System.EventHandler(this.tabPage4_Click);
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.panel1);
+            this.groupBox6.Controls.Add(this.radioButton2);
+            this.groupBox6.Controls.Add(this.radioButton1);
+            this.groupBox6.Controls.Add(this.radioButtonEstaEntre);
+            this.groupBox6.Controls.Add(this.label12);
+            this.groupBox6.Controls.Add(this.checkBoxEstadTiempoTotalTareas);
+            this.groupBox6.Controls.Add(this.checkBoxEstadEstadTareas);
+            this.groupBox6.Controls.Add(this.checkBoxEstadResumenDia);
+            this.groupBox6.Controls.Add(this.label5);
+            this.groupBox6.Controls.Add(this.dateTimePickerEstadFechaFinal);
+            this.groupBox6.Controls.Add(this.label1);
+            this.groupBox6.Controls.Add(this.dateTimePickerEstadFechaInicio);
+            this.groupBox6.Controls.Add(this.buttonImprimirEstadisticas);
+            this.groupBox6.Controls.Add(this.richTextBox2);
+            this.groupBox6.Location = new System.Drawing.Point(5, 4);
+            this.groupBox6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox6.Size = new System.Drawing.Size(628, 337);
+            this.groupBox6.TabIndex = 0;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Informes:";
             // 
             // statusStrip1
             // 
@@ -670,15 +741,176 @@
             this.timerDia.Interval = 60000;
             this.timerDia.Tick += new System.EventHandler(this.timerDia_Tick);
             // 
-            // button1
+            // richTextBox2
             // 
-            this.button1.Location = new System.Drawing.Point(241, 308);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            this.richTextBox2.Location = new System.Drawing.Point(6, 19);
+            this.richTextBox2.Name = "richTextBox2";
+            this.richTextBox2.Size = new System.Drawing.Size(616, 219);
+            this.richTextBox2.TabIndex = 0;
+            this.richTextBox2.Text = "";
+            // 
+            // buttonImprimirEstadisticas
+            // 
+            this.buttonImprimirEstadisticas.Location = new System.Drawing.Point(485, 308);
+            this.buttonImprimirEstadisticas.Name = "buttonImprimirEstadisticas";
+            this.buttonImprimirEstadisticas.Size = new System.Drawing.Size(137, 23);
+            this.buttonImprimirEstadisticas.TabIndex = 1;
+            this.buttonImprimirEstadisticas.Text = "Imprimir Estadísticas";
+            this.buttonImprimirEstadisticas.UseVisualStyleBackColor = true;
+            this.buttonImprimirEstadisticas.Click += new System.EventHandler(this.buttonImprimirEstadisticas_Click);
+            // 
+            // dateTimePickerEstadFechaInicio
+            // 
+            this.dateTimePickerEstadFechaInicio.Location = new System.Drawing.Point(6, 261);
+            this.dateTimePickerEstadFechaInicio.Name = "dateTimePickerEstadFechaInicio";
+            this.dateTimePickerEstadFechaInicio.Size = new System.Drawing.Size(200, 20);
+            this.dateTimePickerEstadFechaInicio.TabIndex = 2;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 243);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(45, 13);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Fechas:";
+            // 
+            // dateTimePickerEstadFechaFinal
+            // 
+            this.dateTimePickerEstadFechaFinal.Location = new System.Drawing.Point(6, 309);
+            this.dateTimePickerEstadFechaFinal.Name = "dateTimePickerEstadFechaFinal";
+            this.dateTimePickerEstadFechaFinal.Size = new System.Drawing.Size(200, 20);
+            this.dateTimePickerEstadFechaFinal.TabIndex = 4;
+            this.dateTimePickerEstadFechaFinal.ValueChanged += new System.EventHandler(this.dateTimePicker2_ValueChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(227, 243);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(45, 13);
+            this.label5.TabIndex = 6;
+            this.label5.Text = "Imprimir:";
+            // 
+            // checkBoxEstadResumenDia
+            // 
+            this.checkBoxEstadResumenDia.AutoSize = true;
+            this.checkBoxEstadResumenDia.Checked = true;
+            this.checkBoxEstadResumenDia.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxEstadResumenDia.Location = new System.Drawing.Point(230, 261);
+            this.checkBoxEstadResumenDia.Name = "checkBoxEstadResumenDia";
+            this.checkBoxEstadResumenDia.Size = new System.Drawing.Size(107, 17);
+            this.checkBoxEstadResumenDia.TabIndex = 7;
+            this.checkBoxEstadResumenDia.Text = "Resumen del día";
+            this.checkBoxEstadResumenDia.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxEstadEstadTareas
+            // 
+            this.checkBoxEstadEstadTareas.AutoSize = true;
+            this.checkBoxEstadEstadTareas.Checked = true;
+            this.checkBoxEstadEstadTareas.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxEstadEstadTareas.Location = new System.Drawing.Point(230, 287);
+            this.checkBoxEstadEstadTareas.Name = "checkBoxEstadEstadTareas";
+            this.checkBoxEstadEstadTareas.Size = new System.Drawing.Size(131, 17);
+            this.checkBoxEstadEstadTareas.TabIndex = 8;
+            this.checkBoxEstadEstadTareas.Text = "Estadísticas de tareas";
+            this.checkBoxEstadEstadTareas.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxEstadTiempoTotalTareas
+            // 
+            this.checkBoxEstadTiempoTotalTareas.AutoSize = true;
+            this.checkBoxEstadTiempoTotalTareas.Checked = true;
+            this.checkBoxEstadTiempoTotalTareas.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxEstadTiempoTotalTareas.Location = new System.Drawing.Point(230, 315);
+            this.checkBoxEstadTiempoTotalTareas.Name = "checkBoxEstadTiempoTotalTareas";
+            this.checkBoxEstadTiempoTotalTareas.Size = new System.Drawing.Size(129, 17);
+            this.checkBoxEstadTiempoTotalTareas.TabIndex = 9;
+            this.checkBoxEstadTiempoTotalTareas.Text = "Tiempo total por tarea";
+            this.checkBoxEstadTiempoTotalTareas.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonEstadRangoFechas
+            // 
+            this.radioButtonEstadRangoFechas.AutoSize = true;
+            this.radioButtonEstadRangoFechas.Location = new System.Drawing.Point(0, 29);
+            this.radioButtonEstadRangoFechas.Name = "radioButtonEstadRangoFechas";
+            this.radioButtonEstadRangoFechas.Size = new System.Drawing.Size(110, 17);
+            this.radioButtonEstadRangoFechas.TabIndex = 10;
+            this.radioButtonEstadRangoFechas.Text = "Rango de Fechas";
+            this.radioButtonEstadRangoFechas.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonEstadDatosDia
+            // 
+            this.radioButtonEstadDatosDia.AutoSize = true;
+            this.radioButtonEstadDatosDia.Checked = true;
+            this.radioButtonEstadDatosDia.Location = new System.Drawing.Point(0, 56);
+            this.radioButtonEstadDatosDia.Name = "radioButtonEstadDatosDia";
+            this.radioButtonEstadDatosDia.Size = new System.Drawing.Size(91, 17);
+            this.radioButtonEstadDatosDia.TabIndex = 11;
+            this.radioButtonEstadDatosDia.TabStop = true;
+            this.radioButtonEstadDatosDia.Text = "Datos del Día";
+            this.radioButtonEstadDatosDia.UseVisualStyleBackColor = true;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(362, 243);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(45, 13);
+            this.label12.TabIndex = 12;
+            this.label12.Text = "Tiempo:";
+            // 
+            // radioButtonEstadTodo
+            // 
+            this.radioButtonEstadTodo.AutoEllipsis = true;
+            this.radioButtonEstadTodo.AutoSize = true;
+            this.radioButtonEstadTodo.Location = new System.Drawing.Point(0, 3);
+            this.radioButtonEstadTodo.Name = "radioButtonEstadTodo";
+            this.radioButtonEstadTodo.Size = new System.Drawing.Size(50, 17);
+            this.radioButtonEstadTodo.TabIndex = 13;
+            this.radioButtonEstadTodo.Text = "Todo";
+            this.radioButtonEstadTodo.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonEstaEntre
+            // 
+            this.radioButtonEstaEntre.AutoSize = true;
+            this.radioButtonEstaEntre.Checked = true;
+            this.radioButtonEstaEntre.Location = new System.Drawing.Point(6, 286);
+            this.radioButtonEstaEntre.Name = "radioButtonEstaEntre";
+            this.radioButtonEstaEntre.Size = new System.Drawing.Size(50, 17);
+            this.radioButtonEstaEntre.TabIndex = 14;
+            this.radioButtonEstaEntre.TabStop = true;
+            this.radioButtonEstaEntre.Text = "Entre";
+            this.radioButtonEstaEntre.UseVisualStyleBackColor = true;
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Location = new System.Drawing.Point(79, 286);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(56, 17);
+            this.radioButton1.TabIndex = 15;
+            this.radioButton1.Text = "Desde";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(153, 286);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(53, 17);
+            this.radioButton2.TabIndex = 16;
+            this.radioButton2.Text = "Hasta";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.radioButtonEstadTodo);
+            this.panel1.Controls.Add(this.radioButtonEstadRangoFechas);
+            this.panel1.Controls.Add(this.radioButtonEstadDatosDia);
+            this.panel1.Location = new System.Drawing.Point(365, 257);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(114, 72);
+            this.panel1.TabIndex = 17;
             // 
             // Form1
             // 
@@ -690,7 +922,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.HelpButton = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.RightToLeftLayout = true;
@@ -713,9 +945,14 @@
             this.tabPage3.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
+            this.tabPage4.ResumeLayout(false);
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.contextMenuStrip1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -782,6 +1019,25 @@
         private System.Windows.Forms.ProgressBar progressBarDia;
         private System.Windows.Forms.Timer timerDia;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.RichTextBox richTextBox2;
+        private System.Windows.Forms.Button buttonImprimirEstadisticas;
+        private System.Windows.Forms.DateTimePicker dateTimePickerEstadFechaInicio;
+        private System.Windows.Forms.DateTimePicker dateTimePickerEstadFechaFinal;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.CheckBox checkBoxEstadEstadTareas;
+        private System.Windows.Forms.CheckBox checkBoxEstadResumenDia;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.CheckBox checkBoxEstadTiempoTotalTareas;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.RadioButton radioButtonEstadDatosDia;
+        private System.Windows.Forms.RadioButton radioButtonEstadRangoFechas;
+        private System.Windows.Forms.RadioButton radioButtonEstadTodo;
+        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.RadioButton radioButtonEstaEntre;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 

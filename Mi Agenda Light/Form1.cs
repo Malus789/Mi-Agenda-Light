@@ -43,35 +43,31 @@ namespace Mi_Agenda_Light
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            Random rnd = new Random();
+            var rnd = new Random();
 
-            Random randomAltMensaje = new Random();
-            int[] opcionesAltMensaje = { 1, 2 };
-            int elegido = opcionesAltMensaje[randomAltMensaje.Next(opcionesAltMensaje.Length)];
-
-            int index = rnd.Next(messagesMotiv.Count);
-            toolStripStatusLabelMensajes.Text = messagesMotiv[index]; // 
-
-            if (listaTareasUrgentes.Count >= 1)
+            /* ---------- Mensaje motivacional ---------- */
+            if (messagesMotiv.Count > 0)
             {
-                if (elegido == 1)
-                {
-
-                    Random rndRecuerda = new Random();
-                    int indexRecuerda = rndRecuerda.Next(listaTareasUrgentes.Count);
-
-                    toolStripStatusLabelMensajes.Text = "Recuerda: " + listaTareasUrgentes[indexRecuerda];
-                }
+                int idxMot = rnd.Next(messagesMotiv.Count);   // nunca se llama con 0
+                toolStripStatusLabelMensajes.Text = messagesMotiv[idxMot];
             }
             else
             {
-                //toolStripStatusLabelRecuerda.Text = "No hay tareas urgentes.";
-
+                toolStripStatusLabelMensajes.Text = "Añade frases a frases.txt";
             }
 
-            //timer.Interval = rnd.Next(30000, 600000); // Cambia el intervalo aleatoriamente entre 30 segundos y 10 minutos (60000, 600000)
-            timer.Interval = rnd.Next(10000, 30000);
+            /* ---------- Mensaje “Recuerda …” ---------- */
+            if (listaTareasUrgentes.Count > 0 && rnd.Next(2) == 0)  // 50 % de las veces
+            {
+                int idxRec = rnd.Next(listaTareasUrgentes.Count);
+                toolStripStatusLabelMensajes.Text = "Recuerda: " +
+                                                    listaTareasUrgentes[idxRec];
+            }
+
+            /* ---------- Cambiar intervalo aleatorio ---------- */
+            timer.Interval = rnd.Next(10_000, 30_000);   // entre 10 s y 30 s
         }
+
 
         private string horaOfechaActual(string datoPedir)
         {
@@ -161,20 +157,21 @@ namespace Mi_Agenda_Light
 
             if (!File.Exists(rutaArchivo))
             {
-                // Crear archivo vacío si no existe
-                File.WriteAllText(rutaArchivo, "");
-                return; // No hace nada más
+                File.WriteAllText(rutaArchivo, "");   // crea el archivo
+                return;                               // deja la lista tal cual
             }
 
-            // Limpiar la lista antes de llenar
+            var lineas = File.ReadAllLines(rutaArchivo)
+                             .Select(l => l.Trim())
+                             .Where(l => l.Length > 0)   // descarta líneas vacías
+                             .ToList();
+
+            if (lineas.Count == 0) return;              // no borres los mensajes default
+
             listaDestino.Clear();
-
-            // Leer línea por línea y agregar a la lista
-            foreach (string linea in File.ReadLines(rutaArchivo))
-            {
-                listaDestino.Add(linea);
-            }
+            listaDestino.AddRange(lineas);
         }
+
 
         private void EliminarItemCheckedListBox(int indiceLinea)
         {
@@ -366,108 +363,91 @@ namespace Mi_Agenda_Light
             buttonIniciarCronómetro.Enabled = false;
             buttonFinalizarTarea.Enabled = false;
 
-            string rutaArchivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "richtext.rft");
+            
+            string rutaArchivo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                                  "richtext.rft");
 
             if (!File.Exists(rutaArchivo))
             {
-                // Crear archivo vacío si no existe
-                File.WriteAllText(rutaArchivo, "");
-                return; // No hace nada más
+                // Crear un RTF mínimo válido
+                File.WriteAllText(rutaArchivo, @"{\rtf1\ansi\pard\par}");
             }
-            else
-            {
-                richTextBox1.LoadFile("richtext.rft");
-            }
+
+            richTextBox1.LoadFile(rutaArchivo, RichTextBoxStreamType.RichText);
 
         }
 
         bool PrimeraFecha = false;
+
         private void AddTableToRichTextBox(bool addNewLine)
         {
-            int columnWidth1 = 4000;  // Ancho de la primera columna en twips
-            int columnWidth2 = 4000; // Ancho de la segunda columna en twips
+            int columnWidth1 = 4000;
+            int columnWidth2 = 4000;
 
-            // Datos para las celdas
-            string cell1Data = textBoxShowDescripcionItemSelec.Text = MostrarDetallesDelItem(0);
-            string cell2Data = "Observacion";
+            string cell1Data = MostrarDetallesDelItem(0);
+            string cell2Data = "Observación";
             string cell3Data = @"Inicio: " + horaDeInicioDeTarea + @"\line Final: " + horaDeFinalDeTarea + @"\line Tiempo: " + labelShowUltimoConteo.Text;
-            string cell4Data;
-            if (TextBoxcomentarioSesion.Text != "")
+            string cell4Data = !string.IsNullOrWhiteSpace(TextBoxcomentarioSesion.Text)
+                                ? TextBoxcomentarioSesion.Text
+                                : MostrarDetallesDelItem(1);
+
+            string rtfTable = @"\trowd\trgaph108" +
+                              @"\cellx" + columnWidth1 +
+                              @"\cellx" + (columnWidth1 + columnWidth2) +
+                              @"\intbl\plain\f0\fs24\cf0 " + cell1Data + @"\cell" +
+                              @"\intbl\plain\f0\fs24\cf0 " + cell2Data + @"\cell" +
+                              @"\row" +
+                              @"\trowd\trgaph108" +
+                              @"\cellx" + columnWidth1 +
+                              @"\cellx" + (columnWidth1 + columnWidth2) +
+                              @"\intbl\plain\f0\fs24\cf0 " + cell3Data + @"\cell" +
+                              @"\intbl\plain\f0\fs24\cf0 " + cell4Data + @"\cell" +
+                              @"\row";
+
+            string currentRtf = richTextBox1.Rtf;
+            int lastBrace = currentRtf.LastIndexOf('}');
+            if (lastBrace == -1) return;
+
+            string before = currentRtf.Substring(0, lastBrace);
+            string tail = before.Length >= 100 ? before.Substring(before.Length - 100) : before;
+            string head = before.Substring(0, before.Length - tail.Length);
+
+            if (!PrimeraFecha)
             {
-                cell4Data = TextBoxcomentarioSesion.Text;
+                // Forzar un salto la primera vez
+                tail = Regex.Replace(tail, @"(\\par|\\line)+\s*$", "", RegexOptions.Multiline);
+                currentRtf = head + tail + @"\par " + rtfTable + "}";
+                PrimeraFecha = true;
             }
             else
             {
-                cell4Data = textBoxShowDescripcionItemSelec.Text = MostrarDetallesDelItem(1);
-            }
-
-
-            // Preparar la inserción de la tabla
-            string rtfTable = @"\trowd\trgaph108"; // Iniciar la definición de fila
-
-            rtfTable += @"\cellx" + columnWidth1.ToString();   // Final de la primera celda
-            rtfTable += @"\cellx" + (columnWidth1 + columnWidth2).ToString();  // Final de la segunda celda
-
-            // Primera fila con dos celdas
-            rtfTable += @"\intbl \f0\fs24 " + cell1Data + @"\cell";  // Datos de la primera celda
-            rtfTable += @"\intbl \f0\fs24 " + cell2Data + @"\cell";  // Datos de la segunda celda
-            rtfTable += @"\row";  // Finalizar la fila
-
-            // Segunda fila también con dos celdas
-            rtfTable += @"\trowd\trgaph108"; // Reiniciar definición de fila para la segunda fila
-            rtfTable += @"\cellx" + columnWidth1.ToString();   // Final de la primera celda en la segunda fila
-            rtfTable += @"\cellx" + (columnWidth1 + columnWidth2).ToString();  // Final de la segunda celda en la segunda fila
-            rtfTable += @"\intbl \f0\fs24 " + cell3Data + @"\cell";  // Datos de la primera celda en la segunda fila
-            rtfTable += @"\intbl \f0\fs24 " + cell4Data + @"\cell";  // Datos de la segunda celda en la segunda fila
-            rtfTable += @"\row";  // Finalizar la fila
-
-            if (addNewLine == false)
-            {
-                if (PrimeraFecha == false)
+                if (!addNewLine)
                 {
-                    string currentRtf = richTextBox1.Rtf;
-                    int lastIndex = currentRtf.LastIndexOf('}');
-                    if (lastIndex != -1)
-                    {
-                        currentRtf = currentRtf.Substring(0, lastIndex);
-                    }
-
-                    currentRtf += rtfTable + @"\pard}";
-                    richTextBox1.Rtf = currentRtf;
-
-                    PrimeraFecha = true;
-
+                    tail = Regex.Replace(tail, @"(\\par|\\line)+\s*$", "", RegexOptions.Multiline);
+                    currentRtf = head + tail + rtfTable + "}";
                 }
                 else
                 {
-                    string currentRtf = richTextBox1.Rtf;
-                    int lastIndex = currentRtf.LastIndexOf(@"\pard");
-                    if (lastIndex != -1)
-                    {
-                        currentRtf = currentRtf.Substring(0, lastIndex); // Eliminar el "\pard" al final
-                    }
-
-                    // Añadir la nueva tabla y cerrar con "\pard" solo al final
-                    currentRtf += rtfTable + @"\pard";
-                    richTextBox1.Rtf = currentRtf;
+                    tail = Regex.Replace(tail, @"(\\par|\\line)+\s*$", "", RegexOptions.Multiline);
+                    currentRtf = head + tail + @"\par " + rtfTable + "}";
                 }
             }
-            else
-            {
-                string currentRtf = richTextBox1.Rtf;
-                int lastIndex = currentRtf.LastIndexOf('}');
-                if (lastIndex != -1)
-                {
-                    currentRtf = currentRtf.Substring(0, lastIndex);
-                }
 
-                currentRtf += rtfTable + @"\pard}";
-                richTextBox1.Rtf = currentRtf;
-            }
-
+            richTextBox1.Rtf = currentRtf;
         }
 
+        private void RegistrarSesion(bool saltoLinea)
+        {
+            // 1) Asegura cabecera de fecha del día
+            VerificarFechaEnRichText(richTextBox1);
 
+            // 2) Inserta la tabla (sin salto = false ⇒ misma línea)
+            AddTableToRichTextBox(saltoLinea);
+
+            // 3) Guarda como RTF válido
+            string rutaRtf = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "richtext.rft");
+            richTextBox1.SaveFile(rutaRtf, RichTextBoxStreamType.RichText);
+        }
 
         private void VerificarFechaEnRichText(RichTextBox richTextBox)
         {
@@ -696,18 +676,12 @@ namespace Mi_Agenda_Light
 
         private void button1_Click_2(object sender, EventArgs e)
         {
-
-            VerificarFechaEnRichText(richTextBox1);
-
-            if (checkBoxSaltoLinea.Checked == false)
-            {              
-                AddTableToRichTextBox(false);
-                richTextBox1.SaveFile("richtext.rft");
-
+            if (checkBoxSaltoLinea.Checked == true)
+            {
+                RegistrarSesion(true);
             } else
             {
-                AddTableToRichTextBox(true);
-                richTextBox1.SaveFile("richtext.rft");
+                RegistrarSesion(false);
             }
             
 
@@ -744,8 +718,6 @@ namespace Mi_Agenda_Light
             public string Observacion { get; set; }
             public TimeSpan Tiempo { get; set; }
         }
-
-
 
         public List<Tarea> ExtraerTareas(string texto)
         {
@@ -853,7 +825,7 @@ namespace Mi_Agenda_Light
 
         /// Imprime el resumen dentro del mismo RichTextBox.
         /// Si “desde” y/o “hasta” son null se toma todo el documento.
-        public void ImprimirResumen(RichTextBox rtb,
+        public void ImprimirResumen(RichTextBox rtb, RichTextBox rtbPrint,
                                     DateTime? desde = null,
                                     DateTime? hasta = null)
         {
@@ -895,14 +867,13 @@ namespace Mi_Agenda_Light
             var totGen = new TimeSpan(tareas.Sum(t => t.Tiempo.Ticks));
             sb.AppendLine($"🧮 Total acumulado: {totGen}");
 
-            rtb.AppendText(sb.ToString());
+            //rtb.AppendText(sb.ToString());
+            rtbPrint.AppendText( sb.ToString() );
         }
 
-
-
-        public void ImprimirEstadisticas(RichTextBox rtb,
+        public void ImprimirEstadisticas(RichTextBox rtb, RichTextBox rtbPrint,
                                  DateTime? desde = null,
-                                 DateTime? hasta = null)
+                                 DateTime? hasta = null, bool estadisticasTarea = true, bool tiempoTotalDeTareas = true)
         {
             // 1) Obtener todas las tareas (usa tu función existente)
             var todas = ExtraerTareas(rtb.Text);
@@ -978,41 +949,116 @@ namespace Mi_Agenda_Light
             sb.AppendLine("=== ESTADÍSTICAS DE TAREAS ===");
             sb.AppendLine();
 
-            sb.AppendLine($"Tarea(s) con MÁS tiempo : {string.Join("; ", masRealizadas)}  ({maxTiempo})");
-            sb.AppendLine($"Tarea(s) con MENOS tiempo: {string.Join("; ", menosRealizadas)}  ({minTiempo})");
+            if (estadisticasTarea == true) { 
+                sb.AppendLine($"Tarea(s) con MÁS tiempo : {string.Join("; ", masRealizadas)}  ({maxTiempo})");
+                sb.AppendLine($"Tarea(s) con MENOS tiempo: {string.Join("; ", menosRealizadas)}  ({minTiempo})");
 
-            if (!string.IsNullOrEmpty(diaMax))
-            {
-                sb.AppendLine();
-                sb.AppendLine($"Día con MÁS tiempo total  : {diaMax}  ({porDia.First().Total})");
-                sb.AppendLine($"Día con MENOS tiempo total: {diaMin}  ({porDia.Last().Total})");
+                if (!string.IsNullOrEmpty(diaMax))
+                {
+                    sb.AppendLine();
+                    sb.AppendLine($"Día con MÁS tiempo total  : {diaMax}  ({porDia.First().Total})");
+                    sb.AppendLine($"Día con MENOS tiempo total: {diaMin}  ({porDia.Last().Total})");
+                }
             }
 
-            sb.AppendLine();
-            sb.AppendLine("Tiempo total por tarea:");
-            foreach (var t in porTarea)
-                sb.AppendLine($"· {t.Nombre} ({t.Veces}): {t.Total}");
+            if (tiempoTotalDeTareas == true) { 
+                sb.AppendLine();
+                sb.AppendLine("Tiempo total por tarea:");
+                foreach (var t in porTarea)
+                    sb.AppendLine($"· {t.Nombre} ({t.Veces}): {t.Total}");
 
-            // 6) Añadir al RichTextBox
-            rtb.AppendText(sb.ToString());
+                // 6) Añadir al RichTextBox
+                //rtb.AppendText(sb.ToString());
+                
+            }
 
+            rtbPrint.AppendText(sb.ToString());
         }
 
             private void button1_Click_1(object sender, EventArgs e)
         {
 
-            ImprimirResumen(richTextBox1);
+            
 
-            ImprimirEstadisticas(richTextBox1);
+        }
 
-            /* ImprimirResumen(
-                 richTextBox1,
-                 new DateTime(2025, 6, 5),
-                 new DateTime(2025, 6, 6));*/
+        private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
+        {
 
-            //ImprimirResumen(richTextBox1, desde: new DateTime(2025, 6, 6));
+        }
+
+        private void buttonImprimirEstadisticas_Click(object sender, EventArgs e)
+        {
+
+            if (radioButtonEstadDatosDia.Checked == true)
+            {
+                DateTime hoy = DateTime.Today;
+                if (checkBoxEstadResumenDia.Checked == true) { ImprimirResumen(richTextBox1, richTextBox2, desde: hoy); }
+              
+                ImprimirEstadisticas(richTextBox1, richTextBox2, desde: hoy,null,checkBoxEstadEstadTareas.Checked,checkBoxEstadTiempoTotalTareas.Checked);
+
+            } else
+            
+            {
+                if (radioButtonEstadTodo.Checked == true)
+                {
+                    DateTime hoy = DateTime.Today;
+                    if (checkBoxEstadResumenDia.Checked == true) { ImprimirResumen(richTextBox1, richTextBox2); }
+
+                    ImprimirEstadisticas(richTextBox1, richTextBox2, null, null, checkBoxEstadEstadTareas.Checked, checkBoxEstadTiempoTotalTareas.Checked);
+
+                } 
+                
+                if (radioButtonEstadRangoFechas.Checked == true)
+
+                {
+
+                    if (checkBoxEstadResumenDia.Checked == true) { ImprimirResumen(richTextBox1, richTextBox2, dateTimePickerEstadFechaInicio.Value.Date, dateTimePickerEstadFechaFinal.Value.Date); }
+
+                    ImprimirEstadisticas(richTextBox1, richTextBox2, dateTimePickerEstadFechaInicio.Value.Date, dateTimePickerEstadFechaFinal.Value.Date, checkBoxEstadEstadTareas.Checked, checkBoxEstadTiempoTotalTareas.Checked);
+
+
+                }
+                
+            }
+
+            //SOLO FALTA AGREGARLE IMPRIMIR DESDE, O HASTA
+
+
+            /*    //Imprimir de todas las fechas
+                ImprimirResumen(richTextBox1,richTextBox2);
+                ImprimirEstadisticas(richTextBox1,richTextBox2);
+            */
+            /*
+
+                //Imprimir entre dos fechas
+                 ImprimirResumen(
+                     richTextBox1, richTextBox2,
+                     new DateTime(2025, 6, 5),
+                     new DateTime(2025, 6, 6));
+
+                ImprimirEstadisticas(
+                     richTextBox1, richTextBox2,
+                     new DateTime(2025, 6, 5),
+                     new DateTime(2025, 6, 6));
+            */
+
+            
+
+            // Imprimir desde:
+            //ImprimirResumen(richTextBox1, richTextBox2, desde: dateTimePickerEstadFechaInicio.Value.Date);
+            //ImprimirEstadisticas(richTextBox1, richTextBox2, desde: dateTimePickerEstadFechaInicio.Value.Date);
+
+            // ImprimirResumen(richTextBox1, richTextBox2, desde: new DateTime(2025, 6, 6));
+            // ImprimirEstadisticas(richTextBox1, richTextBox2, desde: new DateTime(2025, 6, 6));
+
+
 
             // ImprimirResumen(richTextBox1, hasta: new DateTime(2025, 6, 6));
+        }
+
+        private void tabPage4_Click(object sender, EventArgs e)
+        {
 
         }
     }
