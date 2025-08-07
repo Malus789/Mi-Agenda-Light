@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -103,7 +104,10 @@ namespace Mi_Agenda_Light
             //Aqui transformo los saltos de linea en // para que no afecte la manera de guardar
             string descripcionModificada = descripcion.Replace(Environment.NewLine, "\\n");
 
-            string linea = $"{titulo}|{descripcionModificada}|{hora}|{urgenteTexto}|{fechaCreacion}|{minutosTrabajados}|{ciclosTrab}|{ultimoComentario}";
+            //string linea = $"{titulo}|{descripcionModificada}|{hora}|{urgenteTexto}|{fechaCreacion}|{minutosTrabajados}|{ciclosTrab}|{ultimoComentario}";
+
+            string comentarioModificado = ultimoComentario.Replace(Environment.NewLine, "\\n");
+            string linea = $"{titulo}|{descripcionModificada}|{hora}|{urgenteTexto}|{fechaCreacion}|{minutosTrabajados}|{ciclosTrab}|{comentarioModificado}";
 
             File.AppendAllText(rutaArchivo, linea + Environment.NewLine);
         }
@@ -283,7 +287,7 @@ namespace Mi_Agenda_Light
                     string fechaDeCreacion = partes[4];
                     string minutosInvertidos = partes[5];
                     string ciclosTrabajados = partes[6];
-                    string ultimoComentario = partes[7];
+                    string ultimoComentario = ObtenerDescripcion(partes[7]);
 
                     string[] DetallesItems = { tituloEvento, descripcion, horaCreacion, nivelUrgencia, fechaDeCreacion, minutosInvertidos, ciclosTrabajados, ultimoComentario };
 
@@ -375,6 +379,25 @@ namespace Mi_Agenda_Light
 
             richTextBox1.LoadFile(rutaArchivo, RichTextBoxStreamType.RichText);
 
+            CargarNotasExistentes(listBoxNotasArchivosACargar);
+
+        }
+
+        private string PrepararTextoParaCeldaRTF(string texto)
+        {
+            if (string.IsNullOrWhiteSpace(texto)) return "";
+
+            // Escapar caracteres RTF
+            texto = texto.Replace(@"\", @"\\")
+                         .Replace("{", @"\{")
+                         .Replace("}", @"\}");
+
+            // TODOS los saltos → “\line ”  (con un espacio al final)
+            texto = texto.Replace("\r\n", @"\line ")
+                         .Replace("\n", @"\line ")
+                         .Replace("\\n", @"\line ");
+
+            return texto;
         }
 
         bool PrimeraFecha = false;
@@ -387,9 +410,12 @@ namespace Mi_Agenda_Light
             string cell1Data = MostrarDetallesDelItem(0);
             string cell2Data = "Observación";
             string cell3Data = @"Inicio: " + horaDeInicioDeTarea + @"\line Final: " + horaDeFinalDeTarea + @"\line Tiempo: " + labelShowUltimoConteo.Text;
-            string cell4Data = !string.IsNullOrWhiteSpace(TextBoxcomentarioSesion.Text)
-                                ? TextBoxcomentarioSesion.Text
-                                : MostrarDetallesDelItem(1);
+
+            string rawComentario = TextBoxcomentarioSesion.Text.Trim();
+
+            // convierte saltos de línea a \line y escapa caracteres RTF
+            string cell4Data = PrepararTextoParaCeldaRTF(rawComentario);
+
 
             string rtfTable = @"\trowd\trgaph108" +
                               @"\cellx" + columnWidth1 +
@@ -471,7 +497,7 @@ namespace Mi_Agenda_Light
 
                 // Insertar la fecha con estilo
                 richTextBox.AppendText(Environment.NewLine + fechaHoy + Environment.NewLine);
-                
+
 
                 // Opcional: resetear estilo a negro y normal
                 richTextBox.SelectionFont = richTextBox.Font;
@@ -482,7 +508,7 @@ namespace Mi_Agenda_Light
 
         private void checkedListBoxEventos_SelectedIndexChanged(object sender, EventArgs e)
         {
-            textBoxShowDescripcionItemSelec.Text = MostrarDetallesDelItem(1) + "\r\n" +"\r\nÚltimo reporte: " + "\r\n" + MostrarDetallesDelItem(7) ;
+            textBoxShowDescripcionItemSelec.Text = MostrarDetallesDelItem(1) + "\r\n" + "\r\nÚltimo reporte: " + "\r\n" + MostrarDetallesDelItem(7);
 
             //solucionar error de DeSegundosAReloj lo que pasa despues de que se eliminar una tarea
 
@@ -509,7 +535,7 @@ namespace Mi_Agenda_Light
                     labelInfoEventoSeleccionado.Text = textoCompleto;
                 }
             }
-            
+
 
             buttonIniciarCronómetro.Enabled = true;
             buttonFinalizarTarea.Enabled = true;
@@ -541,11 +567,14 @@ namespace Mi_Agenda_Light
                 TimerDecimasDeSegundo.Start();
                 buttonIniciarCronómetro.Text = "Pausar";
                 EstadoConteo = "activo";
-                checkedListBoxEventos.Enabled = false;                
+                checkedListBoxEventos.Enabled = false;
                 tabControl1.TabPages[1].Enabled = false;
-                tabControl1.TabPages[2].Enabled = false;
+                //tabControl1.TabPages[2].Enabled = false;
+                tabControl1.TabPages[3].Enabled = false;
 
                 horaDeInicioDeTarea = horaOfechaActual("time");
+
+
             }
             else
 
@@ -558,6 +587,8 @@ namespace Mi_Agenda_Light
                     labelShowUltimoConteo.Text = labelShowCronometro.Text;
                     comentarioDeLaSesion = TextBoxcomentarioSesion.Text;
                 }
+
+
 
             }
         }
@@ -583,11 +614,11 @@ namespace Mi_Agenda_Light
 
         private void button2_Click(object sender, EventArgs e)
         {
-            
+
             if (EstadoConteo == "activo")
             {
 
-                
+
                 int indiceSeleccionado = checkedListBoxEventos.SelectedIndex;
                 horaDeFinalDeTarea = horaOfechaActual("time");
                 comentarioDeLaSesion = TextBoxcomentarioSesion.Text;
@@ -595,14 +626,16 @@ namespace Mi_Agenda_Light
                 ModificarLineaEnArchivo(indiceSeleccionado, 6, "", "si", 1);
 
                 if (comentarioDeLaSesion != "") {
-                ModificarLineaEnArchivo(indiceSeleccionado, 7, comentarioDeLaSesion, "no", 0);
+
+                    string comentarioSanitizado = comentarioDeLaSesion.Replace(Environment.NewLine, "\\n");
+                    ModificarLineaEnArchivo(indiceSeleccionado, 7, comentarioSanitizado, "no", 0);
                 }
 
                 //Actualizando reportes de la sesion con los datos de la sesion
                 labelShowUltimoConteo.Text = labelShowCronometro.Text;
                 ShowTiempoConteo = ShowTiempoConteo + FormatoDeTextoASegundos(labelShowCronometro.Text);
                 labelShowTiempoTotal.Text = DeSegundosARelog(ShowTiempoConteo);
-                
+
                 ShowCiclosTotales = ShowCiclosTotales + 1;
                 labelShowCiclosTotales.Text = (ShowCiclosTotales).ToString();
 
@@ -618,8 +651,8 @@ namespace Mi_Agenda_Light
 
 
                 } else
-                    { 
-                    
+                {
+
                     if (FormatoDeTextoASegundos(labelShowCronometro.Text) > FormatoDeTextoASegundos(labelTiempoTareaMasDuracion.Text))
                     {
                         labelTareamasduracion.Text = labelInfoEventoSeleccionado.Text;
@@ -645,7 +678,8 @@ namespace Mi_Agenda_Light
                 buttonIniciarCronómetro.Text = "Iniciar";
                 checkedListBoxEventos.Enabled = true;
                 tabControl1.TabPages[1].Enabled = true;
-                tabControl1.TabPages[2].Enabled = true;
+                //tabControl1.TabPages[2].Enabled = true;
+                tabControl1.TabPages[3].Enabled = true;
 
                 EstadoConteo = "Inactivo";
 
@@ -658,7 +692,7 @@ namespace Mi_Agenda_Light
 
                 checkedListBoxEventos.SelectedIndex = indiceSeleccionado;
             }
-            
+
         }
 
         private void ActualizarBarraDelDia()
@@ -683,7 +717,7 @@ namespace Mi_Agenda_Light
             {
                 RegistrarSesion(false);
             }
-            
+
 
         }
 
@@ -703,7 +737,7 @@ namespace Mi_Agenda_Light
 
         private void buttonInsertarATexto_Click(object sender, EventArgs e)
         {
-            
+
         }
 
         private void timerDia_Tick(object sender, EventArgs e)
@@ -825,7 +859,7 @@ namespace Mi_Agenda_Light
 
         /// Imprime el resumen dentro del mismo RichTextBox.
         /// Si “desde” y/o “hasta” son null se toma todo el documento.
-        public void ImprimirResumen(RichTextBox rtb, RichTextBox rtbPrint,
+     /*   public void ImprimirResumen(RichTextBox rtb, RichTextBox rtbPrint,
                                     DateTime? desde = null,
                                     DateTime? hasta = null)
         {
@@ -869,6 +903,108 @@ namespace Mi_Agenda_Light
 
             //rtb.AppendText(sb.ToString());
             rtbPrint.AppendText( sb.ToString() );
+        }
+     */
+
+        public void ImprimirResumen(RichTextBox rtbOrigen,
+                            RichTextBox rtbDestino,
+                            CheckedListBox listaTodas,
+                            DateTime? desde = null,
+                            DateTime? hasta = null)
+        {
+            // 1) Obtener todas las tareas ejecutadas
+            var ejecutadas = ExtraerTareas(rtbOrigen.Text);
+
+            // 2) Filtrar por rango si hace falta
+            var tareas = ejecutadas
+                .Where(t =>
+                    (!desde.HasValue || t.Fecha.Date >= desde.Value.Date) &&
+                    (!hasta.HasValue || t.Fecha.Date <= hasta.Value.Date))
+                .ToList();
+
+            if (tareas.Count == 0)
+            {
+                MessageBox.Show("No se encontraron tareas en el rango solicitado.");
+                return;
+            }
+
+            // 3) Lista de todos los nombres que existen en el CheckedListBox
+            var todasLasTareas = listaTodas.Items
+                                           .Cast<string>()
+                                           .Select(s => s.Trim())
+                                           .Where(s => !string.IsNullOrWhiteSpace(s))
+                                           .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            var sb = new StringBuilder();
+            sb.AppendLine("\n=== RESUMEN DE TAREAS ===\n");
+
+            foreach (var grupo in tareas.GroupBy(t => t.Fecha).OrderBy(g => g.Key))
+            {
+                // ----- Encabezado de fecha -----
+                sb.AppendLine(grupo.Key.ToString("dddd d 'de' MMMM 'del' yyyy",
+                                                  new CultureInfo("es-ES")));
+
+                // ----- Tareas ejecutadas -----
+                foreach (var t in grupo)
+                {
+                    string obs = string.IsNullOrWhiteSpace(t.Observacion) ? "" : $" ({t.Observacion})";
+                    sb.AppendLine($"· {t.Nombre}: {t.Tiempo}{obs}");
+                }
+
+                // ----- Total del día -----
+                var totDia = new TimeSpan(grupo.Sum(t => t.Tiempo.Ticks));
+                sb.AppendLine($"⌛ Total día: {totDia}");
+
+                // ----- Detectar faltantes -----
+                var realizadasHoy = grupo.Select(g => g.Nombre)
+                                         .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+                var faltantes = todasLasTareas
+                                .Where(n => !realizadasHoy.Contains(n))
+                                .ToList();
+
+                if (faltantes.Count > 0)
+                {
+                    sb.AppendLine();                   // línea en blanco antes de la sección
+                    sb.AppendLine("Tareas faltantes:");
+
+                    foreach (var nombre in faltantes)
+                        sb.AppendLine($"- {nombre}");
+                }
+
+                sb.AppendLine();   // línea en blanco entre días
+            }
+
+            // 4) Imprimir: primero el texto normal, luego colorear faltantes en rojo
+            int startPos = rtbDestino.TextLength;          // punto de inserción
+            rtbDestino.AppendText(sb.ToString());
+
+            // 5) Poner en rojo la sección “Tareas faltantes” recién añadida
+            rtbDestino.SelectionStart = startPos;
+            rtbDestino.SelectionLength = rtbDestino.TextLength - startPos;
+
+            // buscar línea por línea dentro de este bloque y colorear
+            var lines = rtbDestino.Text.Substring(startPos)
+                                       .Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
+
+            int offset = startPos;
+            foreach (var line in lines)
+            {
+                if (line.StartsWith("Tareas faltantes:")
+                    || line.StartsWith("- "))
+                {
+                    rtbDestino.SelectionStart = offset;
+                    rtbDestino.SelectionLength = line.Length;
+                    rtbDestino.SelectionColor = Color.Black;
+                }
+
+                // avanzar offset (línea + salto)
+                offset += line.Length + Environment.NewLine.Length;
+            }
+
+            // reset color para futuras escrituras
+            rtbDestino.SelectionLength = 0;
+            rtbDestino.SelectionColor = rtbDestino.ForeColor;
         }
 
         public void ImprimirEstadisticas(RichTextBox rtb, RichTextBox rtbPrint,
@@ -949,7 +1085,7 @@ namespace Mi_Agenda_Light
             sb.AppendLine("=== ESTADÍSTICAS DE TAREAS ===");
             sb.AppendLine();
 
-            if (estadisticasTarea == true) { 
+            if (estadisticasTarea == true) {
                 sb.AppendLine($"Tarea(s) con MÁS tiempo : {string.Join("; ", masRealizadas)}  ({maxTiempo})");
                 sb.AppendLine($"Tarea(s) con MENOS tiempo: {string.Join("; ", menosRealizadas)}  ({minTiempo})");
 
@@ -961,7 +1097,7 @@ namespace Mi_Agenda_Light
                 }
             }
 
-            if (tiempoTotalDeTareas == true) { 
+            if (tiempoTotalDeTareas == true) {
                 sb.AppendLine();
                 sb.AppendLine("Tiempo total por tarea:");
                 foreach (var t in porTarea)
@@ -969,16 +1105,16 @@ namespace Mi_Agenda_Light
 
                 // 6) Añadir al RichTextBox
                 //rtb.AppendText(sb.ToString());
-                
+
             }
 
             rtbPrint.AppendText(sb.ToString());
         }
 
-            private void button1_Click_1(object sender, EventArgs e)
+        private void button1_Click_1(object sender, EventArgs e)
         {
 
-            
+
 
         }
 
@@ -993,33 +1129,33 @@ namespace Mi_Agenda_Light
             if (radioButtonEstadDatosDia.Checked == true)
             {
                 DateTime hoy = DateTime.Today;
-                if (checkBoxEstadResumenDia.Checked == true) { ImprimirResumen(richTextBox1, richTextBox2, desde: hoy); }
-              
-                ImprimirEstadisticas(richTextBox1, richTextBox2, desde: hoy,null,checkBoxEstadEstadTareas.Checked,checkBoxEstadTiempoTotalTareas.Checked);
+                if (checkBoxEstadResumenDia.Checked == true) { ImprimirResumen(richTextBox1, richTextBox2, checkedListBoxEventos, desde: hoy); }
+
+                ImprimirEstadisticas(richTextBox1, richTextBox2, desde: hoy, null, checkBoxEstadEstadTareas.Checked, checkBoxEstadTiempoTotalTareas.Checked);
 
             } else
-            
+
             {
                 if (radioButtonEstadTodo.Checked == true)
                 {
                     DateTime hoy = DateTime.Today;
-                    if (checkBoxEstadResumenDia.Checked == true) { ImprimirResumen(richTextBox1, richTextBox2); }
+                    if (checkBoxEstadResumenDia.Checked == true) { ImprimirResumen(richTextBox1, richTextBox2, checkedListBoxEventos); }
 
                     ImprimirEstadisticas(richTextBox1, richTextBox2, null, null, checkBoxEstadEstadTareas.Checked, checkBoxEstadTiempoTotalTareas.Checked);
 
-                } 
-                
+                }
+
                 if (radioButtonEstadRangoFechas.Checked == true)
 
                 {
 
-                    if (checkBoxEstadResumenDia.Checked == true) { ImprimirResumen(richTextBox1, richTextBox2, dateTimePickerEstadFechaInicio.Value.Date, dateTimePickerEstadFechaFinal.Value.Date); }
+                    if (checkBoxEstadResumenDia.Checked == true) { ImprimirResumen(richTextBox1, richTextBox2, checkedListBoxEventos, dateTimePickerEstadFechaInicio.Value.Date, dateTimePickerEstadFechaFinal.Value.Date); }
 
                     ImprimirEstadisticas(richTextBox1, richTextBox2, dateTimePickerEstadFechaInicio.Value.Date, dateTimePickerEstadFechaFinal.Value.Date, checkBoxEstadEstadTareas.Checked, checkBoxEstadTiempoTotalTareas.Checked);
 
 
                 }
-                
+
             }
 
             //SOLO FALTA AGREGARLE IMPRIMIR DESDE, O HASTA
@@ -1043,7 +1179,7 @@ namespace Mi_Agenda_Light
                      new DateTime(2025, 6, 6));
             */
 
-            
+
 
             // Imprimir desde:
             //ImprimirResumen(richTextBox1, richTextBox2, desde: dateTimePickerEstadFechaInicio.Value.Date);
@@ -1057,9 +1193,482 @@ namespace Mi_Agenda_Light
             // ImprimirResumen(richTextBox1, hasta: new DateTime(2025, 6, 6));
         }
 
+
+        //Globales para la Alarma/Timer
+        enum Estado { Inactivo, Corriendo, Pausado }
+        Estado estado = Estado.Inactivo;
+
+        int totalSegundosAlarma = 0;      // duración total elegida
+        int transcurridoAlarma = 0;
+
+        //Funciones del Timer PERO HAY QUE TRANSFORMAR TODAS ESTAS EN UNA SOLA FUNCION
+
+        private void Iniciar()
+        {
+            totalSegundosAlarma = (int)numericUpDownAlarma.Value * 60;
+            transcurridoAlarma = 0;
+
+            progressBarAlarma.Maximum = totalSegundosAlarma;
+            progressBarAlarma.Value = 0;
+
+            estado = Estado.Corriendo;
+            contextMenuStripTimer.Items[0].Text = "Pausar";
+            numericUpDownAlarma.Enabled= false;
+
+            timerAlarma.Start();
+        }
+
+        // ---------------------- PAUSAR ----------------------
+        private void Pausar()
+        {
+            estado = Estado.Pausado;
+            timerAlarma.Stop();
+            contextMenuStripTimer.Items[0].Text = "Reanudar";
+        }
+
+        // -------------------- REANUDAR ----------------------
+        private void Reanudar()
+        {
+            estado = Estado.Corriendo;
+            timerAlarma.Start();
+            contextMenuStripTimer.Items[0].Text = "Pausar";
+        }
+
+        // ---------------------- DETENER ---------------------
+        private void buttonDetener_Click(object sender, EventArgs e)
+        {
+            ReiniciarTodo();
+        }
+
+        private void ReiniciarTodo()
+        {
+            timerAlarma.Stop();
+            estado = Estado.Inactivo;
+
+            progressBarAlarma.Value = 0;
+            contextMenuStripTimer.Items[0].Text = "Iniciar";
+            numericUpDownAlarma.Enabled = true;
+        }
+        //Fin de Alarma
+        private void FinAlarma()
+        {
+            // ---- Sonido ----
+            try
+            {
+                using (var sp = new System.Media.SoundPlayer("alarma.wav"))
+                {
+                    sp.Play();                 // Play() = asíncrono.  Use PlaySync() si quieres bloquear.
+                }
+            }
+            catch   // si no encuentra o hay error → beep simple
+            {
+                Console.Beep(1000, 600);       // frecuencia 1000 Hz, 0.6 s
+            }
+
+            // ---- Aviso incluso si la ventana está minimizada ----
+            MessageBox.Show(
+                "⏰ ¡Tiempo cumplido!",
+                "Alarma",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information,
+                MessageBoxDefaultButton.Button1,
+                MessageBoxOptions.DefaultDesktopOnly); // <‑‑ aparece encima de todo
+        }
+
+
         private void tabPage4_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void timerAlarma_Tick(object sender, EventArgs e)
+        {
+
+            if (estado != Estado.Corriendo) return;
+
+            transcurridoAlarma++;
+
+            if (transcurridoAlarma <= totalSegundosAlarma)
+                progressBarAlarma.Value = transcurridoAlarma;
+
+            if (transcurridoAlarma >= totalSegundosAlarma)
+            {
+                timerAlarma.Stop();
+                estado = Estado.Inactivo;
+                contextMenuStripTimer.Items[0].Text = "Iniciar";
+                numericUpDownAlarma.Enabled = true;
+                // 🔔 Sonido personalizado o de respaldo
+                try
+                {
+                    using (var sp = new System.Media.SoundPlayer("alarma.wav"))
+                        sp.Play();  // usa PlaySync() si quieres que espere a terminar
+                }
+                catch
+                {
+                    SystemSounds.Exclamation.Play();  // respaldo si no existe el archivo
+                }
+
+                // 📢 Mostrar mensaje encima de todas las ventanas
+                MessageBox.Show(
+                    "¡Tiempo cumplido!",
+                    "⏰ Alarma",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information,
+                    MessageBoxDefaultButton.Button1,
+                    MessageBoxOptions.DefaultDesktopOnly);
+            }
+        }
+    
+
+        private void iniciarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            switch (estado)
+            {
+                case Estado.Inactivo: Iniciar(); break;
+                case Estado.Corriendo: Pausar(); break;
+                case Estado.Pausado: Reanudar(); break;
+            }
+        }
+
+        private void detenerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ReiniciarTodo();
+        }
+
+        private void buttonCambiarFontSeleccion_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void RichTextGuardadoCargado(RichTextBox richTextBox, string accion, string archivo)
+        {
+            if (accion == "guardar")
+            {
+                try
+                {
+                    richTextBox.SaveFile(archivo, RichTextBoxStreamType.RichText);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al guardar las notas:\n" + ex.Message);
+                }
+            } else 
+
+                if (accion == "cargar")
+            {
+
+                if (File.Exists(archivo))
+                {
+                    try
+                    {
+                        richTextBox.LoadFile(archivo, RichTextBoxStreamType.RichText);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error al cargar las notas:\n" + ex.Message);
+                    }
+                }
+            }
+
+        }
+            private void richTextBoxEditorDeTexto_SelectionChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void button1_Click_3(object sender, EventArgs e)
+        {
+            //RichTextGuardadoCargado(richTextBoxEditorDeTexto, "guardar", "notes.rtf");
+
+            if (!string.IsNullOrEmpty(currentFilePath))
+            {
+                // Guardar en archivo ya existente
+                try
+                {
+                    richTextBoxEditorDeTexto.SaveFile(currentFilePath);
+                    toolStripStatusLabelMensajes.Text = "Archivo guardado correctamente.";
+                    timer.Interval = 5000;
+
+                    //MessageBox.Show("Archivo guardado correctamente.");
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al guardar archivo: " + ex.Message);
+                }
+            }
+            else
+            {
+                // Nuevo archivo → SaveFileDialog
+                using (SaveFileDialog sfd = new SaveFileDialog())
+                {
+                    sfd.InitialDirectory = notesFolderPath;
+                    sfd.Filter = "Archivos RTF (*.rtf)|*.rtf";
+                    sfd.DefaultExt = "rtf";
+                    sfd.Title = "Guardar nueva nota";
+
+                    if (sfd.ShowDialog() == DialogResult.OK)
+                    {
+                        try
+                        {
+                            richTextBoxEditorDeTexto.SaveFile(sfd.FileName);
+                            currentFilePath = sfd.FileName;
+
+                            // Añadir al ListBox si es dentro de carpeta Notes
+                            if (Path.GetDirectoryName(currentFilePath) == notesFolderPath)
+                            {
+                                listBoxNotasArchivosACargar.Items.Add(Path.GetFileName(currentFilePath));
+                            }
+
+                            toolStripStatusLabelMensajes.Text = "El archivo: " + Path.GetFileName(sfd.FileName) + " fue guardado correctamente.";
+                            timer.Interval = 5000;
+                            groupBox7.Text = Path.GetFileName(sfd.FileName);
+
+
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show("Error al guardar archivo: " + ex.Message);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //RichTextGuardadoCargado(richTextBoxEditorDeTexto, "cargar", "notes.rtf");
+            
+
+            if (listBoxNotasArchivosACargar.Visible == true)
+            {
+                listBoxNotasArchivosACargar.Visible = false;
+            } else
+            {
+                listBoxNotasArchivosACargar.Visible = true;
+            }
+        }
+
+        private void contextMenuStripTimer_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void buttonEstadisticasClear_Click(object sender, EventArgs e)
+        {
+            richTextBox2.Clear();
+        }
+
+        //Sistema de carga de archivos en Notes
+        string currentFilePath = null;  // Archivo actual cargado (null si es uno nuevo)
+        string notesFolderPath = Path.Combine(Application.StartupPath, "Notes");
+
+
+        private void CargarNotasExistentes(ListBox listBoxArchivos)
+        {
+            if (!Directory.Exists(notesFolderPath))
+                Directory.CreateDirectory(notesFolderPath);
+
+            listBoxArchivos.Items.Clear();
+
+            var archivos = Directory.GetFiles(notesFolderPath, "*.rtf");
+            foreach (var archivo in archivos)
+            {
+                listBoxArchivos.Items.Add(Path.GetFileName(archivo));
+            }
+        }
+
+        private void CargarImagenARichText (RichTextBox richTextBoxAinsertar)
+        {
+
+            using (OpenFileDialog ofd = new OpenFileDialog())
+            {
+                ofd.Title = "Selecciona una imagen";
+                ofd.Filter = "Archivos de imagen|*.jpg;*.jpeg;*.png;*.bmp;*.gif";
+
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        Image img = Image.FromFile(ofd.FileName);
+                        Clipboard.SetImage(img);
+                        richTextBoxAinsertar.Paste();  // Inserta en la posición actual del cursor
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("No se pudo insertar la imagen: " + ex.Message);
+                    }
+                }
+            }
+        }
+
+        private void listBoxNotasArchivosACargar_DoubleClick(object sender, EventArgs e)
+        {
+            if (listBoxNotasArchivosACargar.SelectedItem != null)
+            {
+                string nombreArchivo = listBoxNotasArchivosACargar.SelectedItem.ToString();
+                string rutaCompleta = Path.Combine(notesFolderPath, nombreArchivo);
+
+                try
+                {
+                    richTextBoxEditorDeTexto.LoadFile(rutaCompleta);
+                    currentFilePath = rutaCompleta;
+                    listBoxNotasArchivosACargar.Visible = false;
+
+                    groupBox7.Text = nombreArchivo;
+
+                    toolStripStatusLabelMensajes.Text = "El archivo: " + nombreArchivo + " fue cargado correctamente.";
+                    timer.Interval = 5000;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al cargar archivo: " + ex.Message);
+                }
+            }
+        }
+
+        private void buttonNotasNuevoArchivo_Click(object sender, EventArgs e)
+        {
+            
+
+
+        }
+
+        private void pictureBox3_MouseEnter(object sender, EventArgs e)
+        {
+            pictureBoxNotasNuevoArchivo.BackColor = Color.LightSkyBlue;
+        }
+
+        private void pictureBox3_MouseLeave(object sender, EventArgs e)
+        {
+            pictureBoxNotasNuevoArchivo.BackColor = Color.Transparent;
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+            int selectionStart = richTextBoxEditorDeTexto.SelectionStart;
+            int selectionLength = richTextBoxEditorDeTexto.SelectionLength;
+
+            if (selectionLength > 0)
+            {
+                fontDialogRichTextNotasSeleccion.ShowColor = true;
+
+                if (fontDialogRichTextNotasSeleccion.ShowDialog() == DialogResult.OK)
+                {
+                    // Restaurar selección antes de aplicar cambios
+                    richTextBoxEditorDeTexto.SelectionStart = selectionStart;
+                    richTextBoxEditorDeTexto.SelectionLength = selectionLength;
+
+                    richTextBoxEditorDeTexto.SelectionFont = fontDialogRichTextNotasSeleccion.Font;
+                    richTextBoxEditorDeTexto.SelectionColor = fontDialogRichTextNotasSeleccion.Color;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Selecciona el texto que deseas modificar.", "Aviso",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void pictureBoxNotasCambiarFonts_MouseEnter(object sender, EventArgs e)
+        {
+            //pictureBoxNotasCambiarFonts.BackColor = Color.LightGray;
+            pictureBoxNotasCambiarFonts.BackColor = Color.LightSkyBlue;
+
+        }
+
+        private void pictureBoxNotasCambiarFonts_MouseLeave(object sender, EventArgs e)
+        {
+            pictureBoxNotasCambiarFonts.BackColor = Color.Transparent;
+        }
+
+        private void pictureBoxNotasInsertarImagen_MouseEnter(object sender, EventArgs e)
+        {
+            pictureBoxNotasInsertarImagen.BackColor = Color.LightSkyBlue;
+        }
+
+        private void pictureBoxNotasInsertarImagen_MouseLeave(object sender, EventArgs e)
+        {
+            pictureBoxNotasInsertarImagen.BackColor = Color.Transparent;
+        }
+
+        private void pictureBoxNotasInsertarImagen_Click(object sender, EventArgs e)
+        {
+            CargarImagenARichText(richTextBoxEditorDeTexto);
+        }
+
+        private void pictureBoxNotasNuevoArchivo_Click(object sender, EventArgs e)
+        {
+            richTextBoxEditorDeTexto.Clear();
+            currentFilePath = null;
+            listBoxNotasArchivosACargar.ClearSelected();
+            groupBox7.Text = "Nueva nota";
+
+            toolStripStatusLabelMensajes.Text = "Nuevo archivo de nota";
+            timer.Interval = 5000;
+        }
+
+        private void pictureBoxNotasJustificarAlaIzquierda_DragEnter(object sender, DragEventArgs e)
+        {
+            
+        }
+
+        private void pictureBoxNotasJustificarAlaIzquierda_DragLeave(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void pictureBoxNotasJustificarAlCentro_MouseEnter(object sender, EventArgs e)
+        {
+            pictureBoxNotasJustificarAlCentro.BackColor = Color.LightSkyBlue;
+        }
+
+        private void pictureBoxNotasJustificarAlCentro_MouseLeave(object sender, EventArgs e)
+        {
+            pictureBoxNotasJustificarAlCentro.BackColor = Color.Transparent;
+        }
+
+        private void pictureBoxNotasJustificarAlaDerecha_MouseEnter(object sender, EventArgs e)
+        {
+            pictureBoxNotasJustificarAlaDerecha.BackColor = Color.LightSkyBlue;
+        }
+
+        private void pictureBoxNotasJustificarAlaDerecha_MouseLeave(object sender, EventArgs e)
+        {
+            pictureBoxNotasJustificarAlaDerecha.BackColor = Color.Transparent;
+        }
+
+        private void pictureBoxNotasJustificarAlaIzquierda_MouseEnter(object sender, EventArgs e)
+        {
+            pictureBoxNotasJustificarAlaIzquierda.BackColor = Color.LightSkyBlue;
+        }
+
+        private void pictureBoxNotasJustificarAlaIzquierda_MouseLeave(object sender, EventArgs e)
+        {
+            pictureBoxNotasJustificarAlaIzquierda.BackColor = Color.Transparent;
+        }
+
+        public void AplicarAlineacionATexto(RichTextBox rtb, HorizontalAlignment alineacion)
+        {
+            if (rtb != null)
+            {
+                rtb.SelectionAlignment = alineacion;
+            }
+        }
+
+        private void pictureBoxNotasJustificarAlaIzquierda_Click(object sender, EventArgs e)
+        {
+            AplicarAlineacionATexto(richTextBoxEditorDeTexto, HorizontalAlignment.Left);
+        }
+
+        private void pictureBoxNotasJustificarAlCentro_Click(object sender, EventArgs e)
+        {
+            AplicarAlineacionATexto(richTextBoxEditorDeTexto, HorizontalAlignment.Center);
+        }
+
+        private void pictureBoxNotasJustificarAlaDerecha_Click(object sender, EventArgs e)
+        {
+            AplicarAlineacionATexto(richTextBoxEditorDeTexto, HorizontalAlignment.Right);
         }
     }
 

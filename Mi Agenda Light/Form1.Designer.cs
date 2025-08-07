@@ -33,6 +33,13 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.buttonAlarma = new System.Windows.Forms.Button();
+            this.contextMenuStripTimer = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.iniciarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.detenerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label13 = new System.Windows.Forms.Label();
+            this.progressBarAlarma = new System.Windows.Forms.ProgressBar();
+            this.numericUpDownAlarma = new System.Windows.Forms.NumericUpDown();
             this.label11 = new System.Windows.Forms.Label();
             this.TextBoxcomentarioSesion = new System.Windows.Forms.TextBox();
             this.labelShowCronometroDecimasDeSegundo = new System.Windows.Forms.Label();
@@ -52,7 +59,6 @@
             this.eliminarTareaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.progressBarDia = new System.Windows.Forms.ProgressBar();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.labelTareaMenosduracion = new System.Windows.Forms.Label();
             this.labelTiempoTareaMenosDuracion = new System.Windows.Forms.Label();
@@ -74,15 +80,37 @@
             this.label9 = new System.Windows.Forms.Label();
             this.textBoxAgregarTareaTitulo = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.buttonGuardarRichtextNotas = new System.Windows.Forms.Button();
+            this.richTextBoxEditorDeTexto = new System.Windows.Forms.RichTextBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.checkBoxLogAutomatico = new System.Windows.Forms.CheckBox();
             this.checkBoxSaltoLinea = new System.Windows.Forms.CheckBox();
             this.buttonAgregarLog = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.radioButtonEstadTodo = new System.Windows.Forms.RadioButton();
+            this.radioButtonEstadRangoFechas = new System.Windows.Forms.RadioButton();
+            this.radioButtonEstadDatosDia = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButtonEstaEntre = new System.Windows.Forms.RadioButton();
+            this.label12 = new System.Windows.Forms.Label();
+            this.checkBoxEstadTiempoTotalTareas = new System.Windows.Forms.CheckBox();
+            this.checkBoxEstadEstadTareas = new System.Windows.Forms.CheckBox();
+            this.checkBoxEstadResumenDia = new System.Windows.Forms.CheckBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.dateTimePickerEstadFechaFinal = new System.Windows.Forms.DateTimePicker();
+            this.label1 = new System.Windows.Forms.Label();
+            this.dateTimePickerEstadFechaInicio = new System.Windows.Forms.DateTimePicker();
+            this.buttonImprimirEstadisticas = new System.Windows.Forms.Button();
+            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelMensajes = new System.Windows.Forms.ToolStripStatusLabel();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
@@ -91,50 +119,56 @@
             this.timerCronometro = new System.Windows.Forms.Timer(this.components);
             this.TimerDecimasDeSegundo = new System.Windows.Forms.Timer(this.components);
             this.timerDia = new System.Windows.Forms.Timer(this.components);
-            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
-            this.buttonImprimirEstadisticas = new System.Windows.Forms.Button();
-            this.dateTimePickerEstadFechaInicio = new System.Windows.Forms.DateTimePicker();
-            this.label1 = new System.Windows.Forms.Label();
-            this.dateTimePickerEstadFechaFinal = new System.Windows.Forms.DateTimePicker();
-            this.label5 = new System.Windows.Forms.Label();
-            this.checkBoxEstadResumenDia = new System.Windows.Forms.CheckBox();
-            this.checkBoxEstadEstadTareas = new System.Windows.Forms.CheckBox();
-            this.checkBoxEstadTiempoTotalTareas = new System.Windows.Forms.CheckBox();
-            this.radioButtonEstadRangoFechas = new System.Windows.Forms.RadioButton();
-            this.radioButtonEstadDatosDia = new System.Windows.Forms.RadioButton();
-            this.label12 = new System.Windows.Forms.Label();
-            this.radioButtonEstadTodo = new System.Windows.Forms.RadioButton();
-            this.radioButtonEstaEntre = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.timerAlarma = new System.Windows.Forms.Timer(this.components);
+            this.fontDialogRichTextNotasSeleccion = new System.Windows.Forms.FontDialog();
+            this.listBoxNotasArchivosACargar = new System.Windows.Forms.ListBox();
+            this.buttonEstadisticasClear = new System.Windows.Forms.Button();
+            this.pictureBoxNotasJustificarAlaDerecha = new System.Windows.Forms.PictureBox();
+            this.pictureBoxNotasJustificarAlCentro = new System.Windows.Forms.PictureBox();
+            this.pictureBoxNotasJustificarAlaIzquierda = new System.Windows.Forms.PictureBox();
+            this.pictureBoxNotasInsertarImagen = new System.Windows.Forms.PictureBox();
+            this.pictureBoxNotasNuevoArchivo = new System.Windows.Forms.PictureBox();
+            this.pictureBoxNotasCambiarFonts = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.contextMenuStripTimer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAlarma)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.contextMenuStripListaTareas.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.tabPage5.SuspendLayout();
+            this.groupBox7.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.groupBox6.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
-            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNotasJustificarAlaDerecha)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNotasJustificarAlCentro)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNotasJustificarAlaIzquierda)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNotasInsertarImagen)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNotasNuevoArchivo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNotasCambiarFonts)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(649, 390);
@@ -145,9 +179,9 @@
             this.tabPage1.Controls.Add(this.groupBox2);
             this.tabPage1.Controls.Add(this.groupBox1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
             this.tabPage1.Size = new System.Drawing.Size(641, 364);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Tareas";
@@ -155,6 +189,10 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.buttonAlarma);
+            this.groupBox2.Controls.Add(this.label13);
+            this.groupBox2.Controls.Add(this.progressBarAlarma);
+            this.groupBox2.Controls.Add(this.numericUpDownAlarma);
             this.groupBox2.Controls.Add(this.label11);
             this.groupBox2.Controls.Add(this.TextBoxcomentarioSesion);
             this.groupBox2.Controls.Add(this.labelShowCronometroDecimasDeSegundo);
@@ -167,6 +205,72 @@
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "A Trabajar";
+            // 
+            // buttonAlarma
+            // 
+            this.buttonAlarma.ContextMenuStrip = this.contextMenuStripTimer;
+            this.buttonAlarma.Location = new System.Drawing.Point(115, 279);
+            this.buttonAlarma.Name = "buttonAlarma";
+            this.buttonAlarma.Size = new System.Drawing.Size(25, 20);
+            this.buttonAlarma.TabIndex = 16;
+            this.buttonAlarma.Text = ">";
+            this.buttonAlarma.UseVisualStyleBackColor = true;
+            // 
+            // contextMenuStripTimer
+            // 
+            this.contextMenuStripTimer.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.iniciarToolStripMenuItem,
+            this.detenerToolStripMenuItem});
+            this.contextMenuStripTimer.Name = "contextMenuStripTimer";
+            this.contextMenuStripTimer.Size = new System.Drawing.Size(116, 48);
+            this.contextMenuStripTimer.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripTimer_Opening);
+            // 
+            // iniciarToolStripMenuItem
+            // 
+            this.iniciarToolStripMenuItem.Name = "iniciarToolStripMenuItem";
+            this.iniciarToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
+            this.iniciarToolStripMenuItem.Text = "Iniciar";
+            this.iniciarToolStripMenuItem.Click += new System.EventHandler(this.iniciarToolStripMenuItem_Click);
+            // 
+            // detenerToolStripMenuItem
+            // 
+            this.detenerToolStripMenuItem.Name = "detenerToolStripMenuItem";
+            this.detenerToolStripMenuItem.Size = new System.Drawing.Size(115, 22);
+            this.detenerToolStripMenuItem.Text = "Detener";
+            this.detenerToolStripMenuItem.Click += new System.EventHandler(this.detenerToolStripMenuItem_Click);
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(8, 282);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(36, 13);
+            this.label13.TabIndex = 15;
+            this.label13.Text = "Timer:";
+            // 
+            // progressBarAlarma
+            // 
+            this.progressBarAlarma.Location = new System.Drawing.Point(12, 305);
+            this.progressBarAlarma.Name = "progressBarAlarma";
+            this.progressBarAlarma.Size = new System.Drawing.Size(128, 23);
+            this.progressBarAlarma.TabIndex = 12;
+            // 
+            // numericUpDownAlarma
+            // 
+            this.numericUpDownAlarma.Location = new System.Drawing.Point(51, 279);
+            this.numericUpDownAlarma.Maximum = new decimal(new int[] {
+            1040,
+            0,
+            0,
+            0});
+            this.numericUpDownAlarma.Name = "numericUpDownAlarma";
+            this.numericUpDownAlarma.Size = new System.Drawing.Size(61, 20);
+            this.numericUpDownAlarma.TabIndex = 10;
+            this.numericUpDownAlarma.Value = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
             // 
             // label11
             // 
@@ -331,13 +435,13 @@
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.progressBarDia);
-            this.tabPage2.Controls.Add(this.pictureBox1);
             this.tabPage2.Controls.Add(this.groupBox3);
             this.tabPage2.Controls.Add(this.groupBox4);
+            this.tabPage2.Controls.Add(this.pictureBox1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
             this.tabPage2.Size = new System.Drawing.Size(641, 364);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Configuración";
@@ -349,17 +453,6 @@
             this.progressBarDia.Name = "progressBarDia";
             this.progressBarDia.Size = new System.Drawing.Size(628, 23);
             this.progressBarDia.TabIndex = 8;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
-            this.pictureBox1.Location = new System.Drawing.Point(491, 195);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(142, 115);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 7;
-            this.pictureBox1.TabStop = false;
             // 
             // groupBox3
             // 
@@ -572,6 +665,74 @@
             this.label7.TabIndex = 0;
             this.label7.Text = "Nombre de la tarea:";
             // 
+            // tabPage5
+            // 
+            this.tabPage5.Controls.Add(this.groupBox7);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Size = new System.Drawing.Size(641, 364);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "Notas";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.pictureBoxNotasJustificarAlaDerecha);
+            this.groupBox7.Controls.Add(this.pictureBoxNotasJustificarAlCentro);
+            this.groupBox7.Controls.Add(this.pictureBoxNotasJustificarAlaIzquierda);
+            this.groupBox7.Controls.Add(this.pictureBoxNotasInsertarImagen);
+            this.groupBox7.Controls.Add(this.pictureBoxNotasNuevoArchivo);
+            this.groupBox7.Controls.Add(this.pictureBoxNotasCambiarFonts);
+            this.groupBox7.Controls.Add(this.listBoxNotasArchivosACargar);
+            this.groupBox7.Controls.Add(this.button3);
+            this.groupBox7.Controls.Add(this.button2);
+            this.groupBox7.Controls.Add(this.buttonGuardarRichtextNotas);
+            this.groupBox7.Controls.Add(this.richTextBoxEditorDeTexto);
+            this.groupBox7.Location = new System.Drawing.Point(5, 4);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(628, 337);
+            this.groupBox7.TabIndex = 6;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Nueva nota";
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(488, 308);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(64, 23);
+            this.button3.TabIndex = 3;
+            this.button3.Text = "Cargar";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(6, 308);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(64, 23);
+            this.button2.TabIndex = 2;
+            this.button2.Text = "Opciones";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // buttonGuardarRichtextNotas
+            // 
+            this.buttonGuardarRichtextNotas.Location = new System.Drawing.Point(558, 308);
+            this.buttonGuardarRichtextNotas.Name = "buttonGuardarRichtextNotas";
+            this.buttonGuardarRichtextNotas.Size = new System.Drawing.Size(64, 23);
+            this.buttonGuardarRichtextNotas.TabIndex = 1;
+            this.buttonGuardarRichtextNotas.Text = "Guardar";
+            this.buttonGuardarRichtextNotas.UseVisualStyleBackColor = true;
+            this.buttonGuardarRichtextNotas.Click += new System.EventHandler(this.button1_Click_3);
+            // 
+            // richTextBoxEditorDeTexto
+            // 
+            this.richTextBoxEditorDeTexto.Location = new System.Drawing.Point(6, 37);
+            this.richTextBoxEditorDeTexto.Name = "richTextBoxEditorDeTexto";
+            this.richTextBoxEditorDeTexto.Size = new System.Drawing.Size(616, 265);
+            this.richTextBoxEditorDeTexto.TabIndex = 0;
+            this.richTextBoxEditorDeTexto.Text = "";
+            this.richTextBoxEditorDeTexto.SelectionChanged += new System.EventHandler(this.richTextBoxEditorDeTexto_SelectionChanged);
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.groupBox5);
@@ -584,7 +745,6 @@
             // 
             // groupBox5
             // 
-            this.groupBox5.Controls.Add(this.button1);
             this.groupBox5.Controls.Add(this.checkBoxLogAutomatico);
             this.groupBox5.Controls.Add(this.checkBoxSaltoLinea);
             this.groupBox5.Controls.Add(this.buttonAgregarLog);
@@ -595,16 +755,6 @@
             this.groupBox5.TabIndex = 5;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Impresión:";
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(241, 308);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // checkBoxLogAutomatico
             // 
@@ -650,7 +800,7 @@
             // 
             this.tabPage4.Controls.Add(this.groupBox6);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage4.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Size = new System.Drawing.Size(641, 364);
             this.tabPage4.TabIndex = 3;
@@ -660,6 +810,7 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.buttonEstadisticasClear);
             this.groupBox6.Controls.Add(this.panel1);
             this.groupBox6.Controls.Add(this.radioButton2);
             this.groupBox6.Controls.Add(this.radioButton1);
@@ -675,13 +826,183 @@
             this.groupBox6.Controls.Add(this.buttonImprimirEstadisticas);
             this.groupBox6.Controls.Add(this.richTextBox2);
             this.groupBox6.Location = new System.Drawing.Point(5, 4);
-            this.groupBox6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox6.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox6.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox6.Size = new System.Drawing.Size(628, 337);
             this.groupBox6.TabIndex = 0;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Informes:";
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.radioButtonEstadTodo);
+            this.panel1.Controls.Add(this.radioButtonEstadRangoFechas);
+            this.panel1.Controls.Add(this.radioButtonEstadDatosDia);
+            this.panel1.Location = new System.Drawing.Point(365, 257);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(114, 72);
+            this.panel1.TabIndex = 17;
+            // 
+            // radioButtonEstadTodo
+            // 
+            this.radioButtonEstadTodo.AutoSize = true;
+            this.radioButtonEstadTodo.Location = new System.Drawing.Point(0, 3);
+            this.radioButtonEstadTodo.Name = "radioButtonEstadTodo";
+            this.radioButtonEstadTodo.Size = new System.Drawing.Size(50, 17);
+            this.radioButtonEstadTodo.TabIndex = 13;
+            this.radioButtonEstadTodo.Text = "Todo";
+            this.radioButtonEstadTodo.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonEstadRangoFechas
+            // 
+            this.radioButtonEstadRangoFechas.AutoSize = true;
+            this.radioButtonEstadRangoFechas.Location = new System.Drawing.Point(0, 29);
+            this.radioButtonEstadRangoFechas.Name = "radioButtonEstadRangoFechas";
+            this.radioButtonEstadRangoFechas.Size = new System.Drawing.Size(110, 17);
+            this.radioButtonEstadRangoFechas.TabIndex = 10;
+            this.radioButtonEstadRangoFechas.Text = "Rango de Fechas";
+            this.radioButtonEstadRangoFechas.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonEstadDatosDia
+            // 
+            this.radioButtonEstadDatosDia.AutoSize = true;
+            this.radioButtonEstadDatosDia.Checked = true;
+            this.radioButtonEstadDatosDia.Location = new System.Drawing.Point(0, 56);
+            this.radioButtonEstadDatosDia.Name = "radioButtonEstadDatosDia";
+            this.radioButtonEstadDatosDia.Size = new System.Drawing.Size(91, 17);
+            this.radioButtonEstadDatosDia.TabIndex = 11;
+            this.radioButtonEstadDatosDia.TabStop = true;
+            this.radioButtonEstadDatosDia.Text = "Datos del Día";
+            this.radioButtonEstadDatosDia.UseVisualStyleBackColor = true;
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(153, 286);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(53, 17);
+            this.radioButton2.TabIndex = 16;
+            this.radioButton2.Text = "Hasta";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Location = new System.Drawing.Point(79, 286);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(56, 17);
+            this.radioButton1.TabIndex = 15;
+            this.radioButton1.Text = "Desde";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonEstaEntre
+            // 
+            this.radioButtonEstaEntre.AutoSize = true;
+            this.radioButtonEstaEntre.Checked = true;
+            this.radioButtonEstaEntre.Location = new System.Drawing.Point(6, 286);
+            this.radioButtonEstaEntre.Name = "radioButtonEstaEntre";
+            this.radioButtonEstaEntre.Size = new System.Drawing.Size(50, 17);
+            this.radioButtonEstaEntre.TabIndex = 14;
+            this.radioButtonEstaEntre.TabStop = true;
+            this.radioButtonEstaEntre.Text = "Entre";
+            this.radioButtonEstaEntre.UseVisualStyleBackColor = true;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(362, 243);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(45, 13);
+            this.label12.TabIndex = 12;
+            this.label12.Text = "Tiempo:";
+            // 
+            // checkBoxEstadTiempoTotalTareas
+            // 
+            this.checkBoxEstadTiempoTotalTareas.AutoSize = true;
+            this.checkBoxEstadTiempoTotalTareas.Checked = true;
+            this.checkBoxEstadTiempoTotalTareas.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxEstadTiempoTotalTareas.Location = new System.Drawing.Point(230, 315);
+            this.checkBoxEstadTiempoTotalTareas.Name = "checkBoxEstadTiempoTotalTareas";
+            this.checkBoxEstadTiempoTotalTareas.Size = new System.Drawing.Size(129, 17);
+            this.checkBoxEstadTiempoTotalTareas.TabIndex = 9;
+            this.checkBoxEstadTiempoTotalTareas.Text = "Tiempo total por tarea";
+            this.checkBoxEstadTiempoTotalTareas.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxEstadEstadTareas
+            // 
+            this.checkBoxEstadEstadTareas.AutoSize = true;
+            this.checkBoxEstadEstadTareas.Checked = true;
+            this.checkBoxEstadEstadTareas.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxEstadEstadTareas.Location = new System.Drawing.Point(230, 287);
+            this.checkBoxEstadEstadTareas.Name = "checkBoxEstadEstadTareas";
+            this.checkBoxEstadEstadTareas.Size = new System.Drawing.Size(131, 17);
+            this.checkBoxEstadEstadTareas.TabIndex = 8;
+            this.checkBoxEstadEstadTareas.Text = "Estadísticas de tareas";
+            this.checkBoxEstadEstadTareas.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxEstadResumenDia
+            // 
+            this.checkBoxEstadResumenDia.AutoSize = true;
+            this.checkBoxEstadResumenDia.Checked = true;
+            this.checkBoxEstadResumenDia.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxEstadResumenDia.Location = new System.Drawing.Point(230, 261);
+            this.checkBoxEstadResumenDia.Name = "checkBoxEstadResumenDia";
+            this.checkBoxEstadResumenDia.Size = new System.Drawing.Size(107, 17);
+            this.checkBoxEstadResumenDia.TabIndex = 7;
+            this.checkBoxEstadResumenDia.Text = "Resumen del día";
+            this.checkBoxEstadResumenDia.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(227, 243);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(45, 13);
+            this.label5.TabIndex = 6;
+            this.label5.Text = "Imprimir:";
+            // 
+            // dateTimePickerEstadFechaFinal
+            // 
+            this.dateTimePickerEstadFechaFinal.Location = new System.Drawing.Point(6, 309);
+            this.dateTimePickerEstadFechaFinal.Name = "dateTimePickerEstadFechaFinal";
+            this.dateTimePickerEstadFechaFinal.Size = new System.Drawing.Size(200, 20);
+            this.dateTimePickerEstadFechaFinal.TabIndex = 4;
+            this.dateTimePickerEstadFechaFinal.ValueChanged += new System.EventHandler(this.dateTimePicker2_ValueChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 243);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(45, 13);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Fechas:";
+            // 
+            // dateTimePickerEstadFechaInicio
+            // 
+            this.dateTimePickerEstadFechaInicio.Location = new System.Drawing.Point(6, 261);
+            this.dateTimePickerEstadFechaInicio.Name = "dateTimePickerEstadFechaInicio";
+            this.dateTimePickerEstadFechaInicio.Size = new System.Drawing.Size(200, 20);
+            this.dateTimePickerEstadFechaInicio.TabIndex = 2;
+            // 
+            // buttonImprimirEstadisticas
+            // 
+            this.buttonImprimirEstadisticas.Location = new System.Drawing.Point(485, 308);
+            this.buttonImprimirEstadisticas.Name = "buttonImprimirEstadisticas";
+            this.buttonImprimirEstadisticas.Size = new System.Drawing.Size(137, 23);
+            this.buttonImprimirEstadisticas.TabIndex = 1;
+            this.buttonImprimirEstadisticas.Text = "Imprimir Estadísticas";
+            this.buttonImprimirEstadisticas.UseVisualStyleBackColor = true;
+            this.buttonImprimirEstadisticas.Click += new System.EventHandler(this.buttonImprimirEstadisticas_Click);
+            // 
+            // richTextBox2
+            // 
+            this.richTextBox2.Location = new System.Drawing.Point(6, 19);
+            this.richTextBox2.Name = "richTextBox2";
+            this.richTextBox2.Size = new System.Drawing.Size(616, 219);
+            this.richTextBox2.TabIndex = 0;
+            this.richTextBox2.Text = "";
             // 
             // statusStrip1
             // 
@@ -741,176 +1062,131 @@
             this.timerDia.Interval = 60000;
             this.timerDia.Tick += new System.EventHandler(this.timerDia_Tick);
             // 
-            // richTextBox2
+            // timerAlarma
             // 
-            this.richTextBox2.Location = new System.Drawing.Point(6, 19);
-            this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(616, 219);
-            this.richTextBox2.TabIndex = 0;
-            this.richTextBox2.Text = "";
+            this.timerAlarma.Interval = 1000;
+            this.timerAlarma.Tick += new System.EventHandler(this.timerAlarma_Tick);
             // 
-            // buttonImprimirEstadisticas
+            // fontDialogRichTextNotasSeleccion
             // 
-            this.buttonImprimirEstadisticas.Location = new System.Drawing.Point(485, 308);
-            this.buttonImprimirEstadisticas.Name = "buttonImprimirEstadisticas";
-            this.buttonImprimirEstadisticas.Size = new System.Drawing.Size(137, 23);
-            this.buttonImprimirEstadisticas.TabIndex = 1;
-            this.buttonImprimirEstadisticas.Text = "Imprimir Estadísticas";
-            this.buttonImprimirEstadisticas.UseVisualStyleBackColor = true;
-            this.buttonImprimirEstadisticas.Click += new System.EventHandler(this.buttonImprimirEstadisticas_Click);
+            this.fontDialogRichTextNotasSeleccion.ShowColor = true;
             // 
-            // dateTimePickerEstadFechaInicio
+            // listBoxNotasArchivosACargar
             // 
-            this.dateTimePickerEstadFechaInicio.Location = new System.Drawing.Point(6, 261);
-            this.dateTimePickerEstadFechaInicio.Name = "dateTimePickerEstadFechaInicio";
-            this.dateTimePickerEstadFechaInicio.Size = new System.Drawing.Size(200, 20);
-            this.dateTimePickerEstadFechaInicio.TabIndex = 2;
+            this.listBoxNotasArchivosACargar.FormattingEnabled = true;
+            this.listBoxNotasArchivosACargar.Location = new System.Drawing.Point(397, 44);
+            this.listBoxNotasArchivosACargar.Name = "listBoxNotasArchivosACargar";
+            this.listBoxNotasArchivosACargar.Size = new System.Drawing.Size(217, 251);
+            this.listBoxNotasArchivosACargar.TabIndex = 5;
+            this.listBoxNotasArchivosACargar.Visible = false;
+            this.listBoxNotasArchivosACargar.DoubleClick += new System.EventHandler(this.listBoxNotasArchivosACargar_DoubleClick);
             // 
-            // label1
+            // buttonEstadisticasClear
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 243);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(45, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Fechas:";
+            this.buttonEstadisticasClear.Location = new System.Drawing.Point(485, 255);
+            this.buttonEstadisticasClear.Name = "buttonEstadisticasClear";
+            this.buttonEstadisticasClear.Size = new System.Drawing.Size(137, 23);
+            this.buttonEstadisticasClear.TabIndex = 18;
+            this.buttonEstadisticasClear.Text = "Limpiar";
+            this.buttonEstadisticasClear.UseVisualStyleBackColor = true;
+            this.buttonEstadisticasClear.Click += new System.EventHandler(this.buttonEstadisticasClear_Click);
             // 
-            // dateTimePickerEstadFechaFinal
+            // pictureBoxNotasJustificarAlaDerecha
             // 
-            this.dateTimePickerEstadFechaFinal.Location = new System.Drawing.Point(6, 309);
-            this.dateTimePickerEstadFechaFinal.Name = "dateTimePickerEstadFechaFinal";
-            this.dateTimePickerEstadFechaFinal.Size = new System.Drawing.Size(200, 20);
-            this.dateTimePickerEstadFechaFinal.TabIndex = 4;
-            this.dateTimePickerEstadFechaFinal.ValueChanged += new System.EventHandler(this.dateTimePicker2_ValueChanged);
+            this.pictureBoxNotasJustificarAlaDerecha.Image = global::Mi_Agenda_Light.Properties.Resources.ChatGPT_Image_Font_derec;
+            this.pictureBoxNotasJustificarAlaDerecha.Location = new System.Drawing.Point(387, 9);
+            this.pictureBoxNotasJustificarAlaDerecha.Name = "pictureBoxNotasJustificarAlaDerecha";
+            this.pictureBoxNotasJustificarAlaDerecha.Size = new System.Drawing.Size(28, 26);
+            this.pictureBoxNotasJustificarAlaDerecha.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBoxNotasJustificarAlaDerecha.TabIndex = 13;
+            this.pictureBoxNotasJustificarAlaDerecha.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxNotasJustificarAlaDerecha, "Justificar texto a la derecha");
+            this.pictureBoxNotasJustificarAlaDerecha.Click += new System.EventHandler(this.pictureBoxNotasJustificarAlaDerecha_Click);
+            this.pictureBoxNotasJustificarAlaDerecha.MouseEnter += new System.EventHandler(this.pictureBoxNotasJustificarAlaDerecha_MouseEnter);
+            this.pictureBoxNotasJustificarAlaDerecha.MouseLeave += new System.EventHandler(this.pictureBoxNotasJustificarAlaDerecha_MouseLeave);
             // 
-            // label5
+            // pictureBoxNotasJustificarAlCentro
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(227, 243);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(45, 13);
-            this.label5.TabIndex = 6;
-            this.label5.Text = "Imprimir:";
+            this.pictureBoxNotasJustificarAlCentro.Image = global::Mi_Agenda_Light.Properties.Resources.ChatGPT_Image_Font_centr;
+            this.pictureBoxNotasJustificarAlCentro.Location = new System.Drawing.Point(348, 9);
+            this.pictureBoxNotasJustificarAlCentro.Name = "pictureBoxNotasJustificarAlCentro";
+            this.pictureBoxNotasJustificarAlCentro.Size = new System.Drawing.Size(30, 26);
+            this.pictureBoxNotasJustificarAlCentro.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBoxNotasJustificarAlCentro.TabIndex = 12;
+            this.pictureBoxNotasJustificarAlCentro.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxNotasJustificarAlCentro, "Centrar texto");
+            this.pictureBoxNotasJustificarAlCentro.Click += new System.EventHandler(this.pictureBoxNotasJustificarAlCentro_Click);
+            this.pictureBoxNotasJustificarAlCentro.MouseEnter += new System.EventHandler(this.pictureBoxNotasJustificarAlCentro_MouseEnter);
+            this.pictureBoxNotasJustificarAlCentro.MouseLeave += new System.EventHandler(this.pictureBoxNotasJustificarAlCentro_MouseLeave);
             // 
-            // checkBoxEstadResumenDia
+            // pictureBoxNotasJustificarAlaIzquierda
             // 
-            this.checkBoxEstadResumenDia.AutoSize = true;
-            this.checkBoxEstadResumenDia.Checked = true;
-            this.checkBoxEstadResumenDia.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxEstadResumenDia.Location = new System.Drawing.Point(230, 261);
-            this.checkBoxEstadResumenDia.Name = "checkBoxEstadResumenDia";
-            this.checkBoxEstadResumenDia.Size = new System.Drawing.Size(107, 17);
-            this.checkBoxEstadResumenDia.TabIndex = 7;
-            this.checkBoxEstadResumenDia.Text = "Resumen del día";
-            this.checkBoxEstadResumenDia.UseVisualStyleBackColor = true;
+            this.pictureBoxNotasJustificarAlaIzquierda.Image = global::Mi_Agenda_Light.Properties.Resources.ChatGPT_Image_Font_izq;
+            this.pictureBoxNotasJustificarAlaIzquierda.Location = new System.Drawing.Point(309, 9);
+            this.pictureBoxNotasJustificarAlaIzquierda.Name = "pictureBoxNotasJustificarAlaIzquierda";
+            this.pictureBoxNotasJustificarAlaIzquierda.Size = new System.Drawing.Size(30, 26);
+            this.pictureBoxNotasJustificarAlaIzquierda.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBoxNotasJustificarAlaIzquierda.TabIndex = 11;
+            this.pictureBoxNotasJustificarAlaIzquierda.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxNotasJustificarAlaIzquierda, "Justificar texto a la izquierda");
+            this.pictureBoxNotasJustificarAlaIzquierda.Click += new System.EventHandler(this.pictureBoxNotasJustificarAlaIzquierda_Click);
+            this.pictureBoxNotasJustificarAlaIzquierda.DragEnter += new System.Windows.Forms.DragEventHandler(this.pictureBoxNotasJustificarAlaIzquierda_DragEnter);
+            this.pictureBoxNotasJustificarAlaIzquierda.DragLeave += new System.EventHandler(this.pictureBoxNotasJustificarAlaIzquierda_DragLeave);
+            this.pictureBoxNotasJustificarAlaIzquierda.MouseEnter += new System.EventHandler(this.pictureBoxNotasJustificarAlaIzquierda_MouseEnter);
+            this.pictureBoxNotasJustificarAlaIzquierda.MouseLeave += new System.EventHandler(this.pictureBoxNotasJustificarAlaIzquierda_MouseLeave);
             // 
-            // checkBoxEstadEstadTareas
+            // pictureBoxNotasInsertarImagen
             // 
-            this.checkBoxEstadEstadTareas.AutoSize = true;
-            this.checkBoxEstadEstadTareas.Checked = true;
-            this.checkBoxEstadEstadTareas.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxEstadEstadTareas.Location = new System.Drawing.Point(230, 287);
-            this.checkBoxEstadEstadTareas.Name = "checkBoxEstadEstadTareas";
-            this.checkBoxEstadEstadTareas.Size = new System.Drawing.Size(131, 17);
-            this.checkBoxEstadEstadTareas.TabIndex = 8;
-            this.checkBoxEstadEstadTareas.Text = "Estadísticas de tareas";
-            this.checkBoxEstadEstadTareas.UseVisualStyleBackColor = true;
+            this.pictureBoxNotasInsertarImagen.Image = global::Mi_Agenda_Light.Properties.Resources.ChatGPT_Image_New_Image;
+            this.pictureBoxNotasInsertarImagen.Location = new System.Drawing.Point(439, 9);
+            this.pictureBoxNotasInsertarImagen.Name = "pictureBoxNotasInsertarImagen";
+            this.pictureBoxNotasInsertarImagen.Size = new System.Drawing.Size(30, 26);
+            this.pictureBoxNotasInsertarImagen.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxNotasInsertarImagen.TabIndex = 10;
+            this.pictureBoxNotasInsertarImagen.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxNotasInsertarImagen, "Insertar imagen");
+            this.pictureBoxNotasInsertarImagen.Click += new System.EventHandler(this.pictureBoxNotasInsertarImagen_Click);
+            this.pictureBoxNotasInsertarImagen.MouseEnter += new System.EventHandler(this.pictureBoxNotasInsertarImagen_MouseEnter);
+            this.pictureBoxNotasInsertarImagen.MouseLeave += new System.EventHandler(this.pictureBoxNotasInsertarImagen_MouseLeave);
             // 
-            // checkBoxEstadTiempoTotalTareas
+            // pictureBoxNotasNuevoArchivo
             // 
-            this.checkBoxEstadTiempoTotalTareas.AutoSize = true;
-            this.checkBoxEstadTiempoTotalTareas.Checked = true;
-            this.checkBoxEstadTiempoTotalTareas.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxEstadTiempoTotalTareas.Location = new System.Drawing.Point(230, 315);
-            this.checkBoxEstadTiempoTotalTareas.Name = "checkBoxEstadTiempoTotalTareas";
-            this.checkBoxEstadTiempoTotalTareas.Size = new System.Drawing.Size(129, 17);
-            this.checkBoxEstadTiempoTotalTareas.TabIndex = 9;
-            this.checkBoxEstadTiempoTotalTareas.Text = "Tiempo total por tarea";
-            this.checkBoxEstadTiempoTotalTareas.UseVisualStyleBackColor = true;
+            this.pictureBoxNotasNuevoArchivo.Image = global::Mi_Agenda_Light.Properties.Resources.ChatGPT_New_File;
+            this.pictureBoxNotasNuevoArchivo.Location = new System.Drawing.Point(146, 9);
+            this.pictureBoxNotasNuevoArchivo.Name = "pictureBoxNotasNuevoArchivo";
+            this.pictureBoxNotasNuevoArchivo.Size = new System.Drawing.Size(30, 26);
+            this.pictureBoxNotasNuevoArchivo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxNotasNuevoArchivo.TabIndex = 9;
+            this.pictureBoxNotasNuevoArchivo.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxNotasNuevoArchivo, "Crear nueva Nota");
+            this.pictureBoxNotasNuevoArchivo.Click += new System.EventHandler(this.pictureBoxNotasNuevoArchivo_Click);
+            this.pictureBoxNotasNuevoArchivo.MouseEnter += new System.EventHandler(this.pictureBox3_MouseEnter);
+            this.pictureBoxNotasNuevoArchivo.MouseLeave += new System.EventHandler(this.pictureBox3_MouseLeave);
             // 
-            // radioButtonEstadRangoFechas
+            // pictureBoxNotasCambiarFonts
             // 
-            this.radioButtonEstadRangoFechas.AutoSize = true;
-            this.radioButtonEstadRangoFechas.Location = new System.Drawing.Point(0, 29);
-            this.radioButtonEstadRangoFechas.Name = "radioButtonEstadRangoFechas";
-            this.radioButtonEstadRangoFechas.Size = new System.Drawing.Size(110, 17);
-            this.radioButtonEstadRangoFechas.TabIndex = 10;
-            this.radioButtonEstadRangoFechas.Text = "Rango de Fechas";
-            this.radioButtonEstadRangoFechas.UseVisualStyleBackColor = true;
+            this.pictureBoxNotasCambiarFonts.Image = global::Mi_Agenda_Light.Properties.Resources.ChatGPT_Image_Fonts;
+            this.pictureBoxNotasCambiarFonts.Location = new System.Drawing.Point(269, 9);
+            this.pictureBoxNotasCambiarFonts.Name = "pictureBoxNotasCambiarFonts";
+            this.pictureBoxNotasCambiarFonts.Size = new System.Drawing.Size(30, 26);
+            this.pictureBoxNotasCambiarFonts.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxNotasCambiarFonts.TabIndex = 8;
+            this.pictureBoxNotasCambiarFonts.TabStop = false;
+            this.toolTip1.SetToolTip(this.pictureBoxNotasCambiarFonts, "Cambiar fuente");
+            this.pictureBoxNotasCambiarFonts.Click += new System.EventHandler(this.pictureBox2_Click);
+            this.pictureBoxNotasCambiarFonts.MouseEnter += new System.EventHandler(this.pictureBoxNotasCambiarFonts_MouseEnter);
+            this.pictureBoxNotasCambiarFonts.MouseLeave += new System.EventHandler(this.pictureBoxNotasCambiarFonts_MouseLeave);
             // 
-            // radioButtonEstadDatosDia
+            // pictureBox1
             // 
-            this.radioButtonEstadDatosDia.AutoSize = true;
-            this.radioButtonEstadDatosDia.Checked = true;
-            this.radioButtonEstadDatosDia.Location = new System.Drawing.Point(0, 56);
-            this.radioButtonEstadDatosDia.Name = "radioButtonEstadDatosDia";
-            this.radioButtonEstadDatosDia.Size = new System.Drawing.Size(91, 17);
-            this.radioButtonEstadDatosDia.TabIndex = 11;
-            this.radioButtonEstadDatosDia.TabStop = true;
-            this.radioButtonEstadDatosDia.Text = "Datos del Día";
-            this.radioButtonEstadDatosDia.UseVisualStyleBackColor = true;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(362, 243);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(45, 13);
-            this.label12.TabIndex = 12;
-            this.label12.Text = "Tiempo:";
-            // 
-            // radioButtonEstadTodo
-            // 
-            this.radioButtonEstadTodo.AutoEllipsis = true;
-            this.radioButtonEstadTodo.AutoSize = true;
-            this.radioButtonEstadTodo.Location = new System.Drawing.Point(0, 3);
-            this.radioButtonEstadTodo.Name = "radioButtonEstadTodo";
-            this.radioButtonEstadTodo.Size = new System.Drawing.Size(50, 17);
-            this.radioButtonEstadTodo.TabIndex = 13;
-            this.radioButtonEstadTodo.Text = "Todo";
-            this.radioButtonEstadTodo.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonEstaEntre
-            // 
-            this.radioButtonEstaEntre.AutoSize = true;
-            this.radioButtonEstaEntre.Checked = true;
-            this.radioButtonEstaEntre.Location = new System.Drawing.Point(6, 286);
-            this.radioButtonEstaEntre.Name = "radioButtonEstaEntre";
-            this.radioButtonEstaEntre.Size = new System.Drawing.Size(50, 17);
-            this.radioButtonEstaEntre.TabIndex = 14;
-            this.radioButtonEstaEntre.TabStop = true;
-            this.radioButtonEstaEntre.Text = "Entre";
-            this.radioButtonEstaEntre.UseVisualStyleBackColor = true;
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(79, 286);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(56, 17);
-            this.radioButton1.TabIndex = 15;
-            this.radioButton1.Text = "Desde";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(153, 286);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(53, 17);
-            this.radioButton2.TabIndex = 16;
-            this.radioButton2.Text = "Hasta";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.radioButtonEstadTodo);
-            this.panel1.Controls.Add(this.radioButtonEstadRangoFechas);
-            this.panel1.Controls.Add(this.radioButtonEstadDatosDia);
-            this.panel1.Location = new System.Drawing.Point(365, 257);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(114, 72);
-            this.panel1.TabIndex = 17;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
+            this.pictureBox1.Location = new System.Drawing.Point(491, 195);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(142, 115);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 7;
+            this.pictureBox1.TabStop = false;
             // 
             // Form1
             // 
@@ -922,7 +1198,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.HelpButton = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.RightToLeftLayout = true;
@@ -933,26 +1209,36 @@
             this.tabPage1.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.contextMenuStripTimer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownAlarma)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.contextMenuStripListaTareas.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            this.tabPage5.ResumeLayout(false);
+            this.groupBox7.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.tabPage4.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.contextMenuStrip1.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNotasJustificarAlaDerecha)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNotasJustificarAlCentro)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNotasJustificarAlaIzquierda)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNotasInsertarImagen)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNotasNuevoArchivo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNotasCambiarFonts)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1018,7 +1304,6 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ProgressBar progressBarDia;
         private System.Windows.Forms.Timer timerDia;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.GroupBox groupBox6;
         private System.Windows.Forms.RichTextBox richTextBox2;
@@ -1038,6 +1323,30 @@
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.RadioButton radioButtonEstaEntre;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.NumericUpDown numericUpDownAlarma;
+        private System.Windows.Forms.ProgressBar progressBarAlarma;
+        private System.Windows.Forms.Timer timerAlarma;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Button buttonAlarma;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripTimer;
+        private System.Windows.Forms.ToolStripMenuItem iniciarToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem detenerToolStripMenuItem;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.Button buttonGuardarRichtextNotas;
+        private System.Windows.Forms.RichTextBox richTextBoxEditorDeTexto;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.FontDialog fontDialogRichTextNotasSeleccion;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.ListBox listBoxNotasArchivosACargar;
+        private System.Windows.Forms.Button buttonEstadisticasClear;
+        private System.Windows.Forms.PictureBox pictureBoxNotasCambiarFonts;
+        private System.Windows.Forms.PictureBox pictureBoxNotasNuevoArchivo;
+        private System.Windows.Forms.PictureBox pictureBoxNotasInsertarImagen;
+        private System.Windows.Forms.PictureBox pictureBoxNotasJustificarAlaDerecha;
+        private System.Windows.Forms.PictureBox pictureBoxNotasJustificarAlCentro;
+        private System.Windows.Forms.PictureBox pictureBoxNotasJustificarAlaIzquierda;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 
